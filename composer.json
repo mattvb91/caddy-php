@@ -1,0 +1,16 @@
+{
+  "name": "mattvb91/php-caddy",
+  "version": "0.0.1-alpha",
+  "type": "package",
+  "autoload": {
+    "psr-4": {
+      "mattvb91\\CaddyPhp\\": "src/"
+    }
+  },
+  "require": {
+    "guzzlehttp/guzzle": "^7.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  }
+}

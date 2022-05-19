@@ -15,5 +15,7 @@ services:
   composer:
     build:
       context: ./docker/composer
+    depends_on:
+      - caddy
     volumes:
       - ./:/app

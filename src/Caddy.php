@@ -10,12 +10,14 @@ class Caddy implements Arrayable
 {
     private Client $_client;
 
-    private ?Admin $_admin;
+    private Admin $_admin;
 
-    public function __construct($hostname = 'caddy')
+    public function __construct(?string $hostname = 'caddy', ?Admin $admin = new Admin())
     {
+        $this->setAdmin($admin);
+
         $this->_client = new Client([
-            'base_uri' => $hostname,
+            'base_uri' => $hostname . $this->getAdmin()->getListen() . '/config',
             'headers'  => [
                 'Content-Type' => 'application/json',
             ],
@@ -27,9 +29,17 @@ class Caddy implements Arrayable
      */
     public function load(): bool
     {
-        return $this->_client->put('/load', [
+        return $this->_client->post('/load', [
                 'json' => $this->toArray(),
             ])->getStatusCode() === 200;
+    }
+
+    /**
+     * If you need to query something directly you can use the Guzzle client
+     */
+    public function getClient(): Client
+    {
+        return $this->_client;
     }
 
     public function getAdmin(): ?Admin
@@ -37,7 +47,7 @@ class Caddy implements Arrayable
         return $this->_admin;
     }
 
-    public function setAdmin(Admin $admin): static
+    protected function setAdmin(Admin $admin): static
     {
         $this->_admin = $admin;
 

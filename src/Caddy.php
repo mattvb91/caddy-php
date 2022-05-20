@@ -4,6 +4,8 @@ namespace mattvb91\CaddyPhp;
 
 use GuzzleHttp\Client;
 use mattvb91\CaddyPhp\Config\Admin;
+use mattvb91\CaddyPhp\Config\Logging;
+use mattvb91\CaddyPhp\Config\Logs\Log;
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Caddy implements Arrayable
@@ -11,6 +13,7 @@ class Caddy implements Arrayable
     private Client $_client;
 
     private Admin $_admin;
+    private ?Logging $_logging;
 
     public function __construct(?string $hostname = 'caddy', ?Admin $admin = new Admin())
     {
@@ -54,12 +57,23 @@ class Caddy implements Arrayable
         return $this;
     }
 
+    public function setLogging(Logging $logging)
+    {
+        $this->_logging = $logging;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         $config = [];
 
         if (isset($this->_admin)) {
             $config['admin'] = $this->_admin->toArray();
+        }
+
+        if(isset($this->_logging)) {
+            $config['logging'] = $this->_logging->toArray();
         }
 
         return $config;

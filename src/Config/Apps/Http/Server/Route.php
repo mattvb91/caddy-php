@@ -2,6 +2,7 @@
 
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server;
 
+use mattvb91\caddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 /**
@@ -15,16 +16,46 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 class Route implements Arrayable
 {
 
-    private string $_group = "";
+    private ?string $_group;
 
-    private array $_match = [];
+    /** @var HandlerInterface[] */
+    private array $_handle = [];
 
-    private bool $_terminal = false;
+    private ?array $_match;
+
+    private ?bool $_terminal;
+
+    public function setGroup(string $group)
+    {
+        $this->_group = $group;
+    }
+
+
+    public function addMatch($match): static
+    {
+        $this->_match[] = $match;
+        return $this;
+    }
+
+    public function addHandle(HandlerInterface $handler): static
+    {
+        $this->_handle[] = $handler;
+
+        return $this;
+    }
 
     public function toArray(): array
     {
-        return [
-            'group' => $this->_group,
-        ];
+        $config = [];
+
+        if (isset($this->_group)) {
+            $config['group'] = $this->_group;
+        }
+
+        $config['handle'] = [...array_map(static function (HandlerInterface $handler) {
+            return $handler->toArray();
+        }, $this->_handle)];
+
+        return $config;
     }
 }

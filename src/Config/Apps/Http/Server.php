@@ -15,6 +15,14 @@ class Server implements Arrayable
     /** @var Route[] */
     private array $_routes = [];
 
+
+    public function setListen(array $listen): static
+    {
+        $this->_listen = $listen;
+
+        return $this;
+    }
+
     public function addRoute(Route $route): static
     {
         $this->_routes[] = $route;

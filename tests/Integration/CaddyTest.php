@@ -3,7 +3,6 @@
 namespace Integration;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
 use mattvb91\CaddyPhp\Caddy;
 use mattvb91\CaddyPhp\Config\Apps\Http;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Route;
@@ -53,7 +52,10 @@ class CaddyTest extends TestCase
         $this->assertTrue($caddy->load());
     }
 
-    public function test_can_load_static_response_app()
+    /**
+     * @coversNothing
+     */
+    public function test_can_load_static_response_app(): void
     {
         $caddy = new Caddy();
         $caddy->addApp(

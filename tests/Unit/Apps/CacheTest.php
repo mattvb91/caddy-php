@@ -16,23 +16,23 @@ class CacheTest extends TestCase
 
         $this->assertEquals([
             'cache' => [
-                'api' => [
+                'api'       => [
                     'basepath' => '/cache',
-                    'souin' => [
+                    'souin'    => [
                         'basepath' => '/souin',
-                        'enable' => true,
+                        'enable'   => true,
                     ],
                 ],
-                'cdn' => [
-                    'dynamic' => true,
+                'cdn'       => [
+                    'dynamic'  => true,
                     'strategy' => 'hard',
                 ],
-                'log_level' => 'DEBUG',
-                'nuts' => [
+                'log_level' => 'INFO',
+                'nuts'      => [
                     'path' => '/tmp/nuts-souin',
                 ],
-                'stale' => '0s',
-                'ttl' => '3600s',
+                'stale'     => '3600s',
+                'ttl'       => '3600s',
             ],
         ], $cache->ToArray());
     }

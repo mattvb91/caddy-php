@@ -1,5 +1,5 @@
 {
-  "name": "mattvb91/php-caddy",
+  "name": "mattvb91/caddy-php",
   "version": "0.0.1-alpha",
   "type": "package",
   "autoload": {

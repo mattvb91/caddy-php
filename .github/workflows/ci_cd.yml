@@ -90,7 +90,7 @@ jobs:
         run: |
           docker run -p 80:80 -p 2019:2019 docker.pkg.github.com/mattvb91/caddy-php/caddy:head
           docker run -v $(pwd):/app composer composer install
-          docker run --network="caddy_php_default" -e XDEBUG_MODE=coverage -v $(pwd)/backend:/app docker.pkg.github.com/${{ env.REPO_NAME }}/php-composer:${{ env.IMAGE_TAG }} php artisan test --coverage-clover=coverage.xml
+          docker run --network="caddy_php_default" -e XDEBUG_MODE=coverage -v $(pwd)/backend:/app docker.pkg.github.com/${{ env.REPO_NAME }}/composer:${{ env.IMAGE_TAG }} php artisan test --coverage-clover=coverage.xml
       - uses: codecov/codecov-action@v3.1.0
         with:
           fail_ci_if_error: false

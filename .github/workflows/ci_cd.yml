@@ -88,10 +88,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: PHPUnit
         run: |
-          docker run -p 80:80 -p 2019:2019 docker.pkg.github.com/mattvb91/caddy-php/caddy:head
+          docker run --network="bridge" -p 80:80 -p 2019:2019 docker.pkg.github.com/mattvb91/caddy-php/caddy:head
           docker run -v $(pwd):/app composer composer install
           docker network ls
-          docker run --network="caddy-php_default" -e XDEBUG_MODE=coverage -v $(pwd)/backend:/app docker.pkg.github.com/mattvb91/${{ env.REPO_NAME }}/composer:head php artisan test --coverage-clover=coverage.xml
+          docker run --network="bridge" -e XDEBUG_MODE=coverage -v $(pwd)/backend:/app docker.pkg.github.com/mattvb91/${{ env.REPO_NAME }}/composer:head php artisan test --coverage-clover=coverage.xml
         env:
           REPO_NAME: ${{ github.event.repository.name }}
       - uses: codecov/codecov-action@v3.1.0

@@ -5,4 +5,5 @@ RUN apk --update --no-cache add autoconf g++ make \
     && docker-php-ext-enable xdebug \
     && apk del --purge autoconf g++ make
 
+
 EXPOSE 9000

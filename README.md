@@ -35,6 +35,39 @@ $caddy->addApp(
 $caddy->load();
 ```
 
+This will result in the following Caddy config:
+
+```json
+{
+  "admin": {
+    "disabled": false,
+    "listen": ":2019"
+  },
+  "apps": {
+    "http": {
+      "servers": {
+        "server1": {
+          "listen": [
+            ":80"
+          ],
+          "routes": [
+            {
+              "handle": [
+                {
+                  "handler": "static_response",
+                  "body": "Hello world",
+                  "status_code": 200
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
 ```shell
 curl -v localhost
 

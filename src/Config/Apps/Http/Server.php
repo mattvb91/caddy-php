@@ -10,7 +10,7 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
  */
 class Server implements Arrayable
 {
-    private array $_listen = [];
+    private array $_listen = [':80'];
 
     /** @var Route[] */
     private array $_routes = [];

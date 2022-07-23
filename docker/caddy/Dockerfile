@@ -1,6 +1,7 @@
 FROM caddy:2.5.1-builder-alpine
 
-RUN xcaddy build --with github.com/caddyserver/cache-handler
+RUN xcaddy build --with github.com/darkweak/souin/plugins/caddy \
+    --with github.com/darkweak/souin@v1.6.16
 
 # See https://caddyserver.com/docs/conventions#file-locations for details
 ENV XDG_CONFIG_HOME /config

@@ -11,7 +11,7 @@ jobs:
 
   build-caddy-image:
     runs-on: ubuntu-latest
-#    if: github.ref == 'refs/heads/develop' # Running this job only for develop branch
+    if: github.ref == 'refs/heads/develop' # Running this job only for develop branch
     steps:
       - name: Cancel Previous Run preventing duplicate pipelines
         uses: styfle/cancel-workflow-action@0.9.1
@@ -40,7 +40,7 @@ jobs:
 
   build-composer-image:
     runs-on: ubuntu-latest
-#    if: github.ref == 'refs/heads/develop' # Running this job only for develop branch
+    if: github.ref == 'refs/heads/develop' # Running this job only for develop branch
     steps:
       - name: Cancel Previous Run preventing duplicate pipelines
         uses: styfle/cancel-workflow-action@0.9.1
@@ -55,7 +55,7 @@ jobs:
           filters: |
             php:
               - 'docker/composer/**'
-      - name: Build and Publish head caddy image
+      - name: Build and Publish head composer image
         # run only if some file in 'src' folder was changed
         if: steps.changes.outputs.php == 'true'
         uses: VaultVulp/gp-docker-action@1.2.0
@@ -81,14 +81,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3 # Checking out the repo
       - name: Login to github registry
-        if: steps.changes.outputs.backend == 'true' || github.ref == 'refs/heads/master'
         uses: docker/login-action@v1
         with:
           registry: docker.pkg.github.com
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: PHPUnit
-        if: steps.changes.outputs.backend == 'true' || github.ref == 'refs/heads/master'
         run: |
           docker run -p 80:80 -p 2019:2019 docker.pkg.github.com/mattvb91/caddy-php/caddy:head
           docker run -v $(pwd):/app composer composer install

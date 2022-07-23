@@ -90,6 +90,7 @@ jobs:
         run: |
           docker run -p 80:80 -p 2019:2019 docker.pkg.github.com/mattvb91/caddy-php/caddy:head
           docker run -v $(pwd):/app composer composer install
+          docker network ls
           docker run --network="caddy-php_default" -e XDEBUG_MODE=coverage -v $(pwd)/backend:/app docker.pkg.github.com/mattvb91/${{ env.REPO_NAME }}/composer:head php artisan test --coverage-clover=coverage.xml
         env:
           REPO_NAME: ${{ github.event.repository.name }}

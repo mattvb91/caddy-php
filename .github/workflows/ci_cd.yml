@@ -89,7 +89,7 @@ jobs:
       - name: PHPUnit
         run: |
           docker network create -d bridge caddy-network
-          docker run --rm --network="caddy-network" -p 80:80 -p 2019:2019 docker.pkg.github.com/mattvb91/caddy-php/caddy:head
+          docker run --network="caddy-network" -p 80:80 -p 2019:2019 docker.pkg.github.com/mattvb91/caddy-php/caddy:head
           docker run -v $(pwd):/app composer composer install
           docker ps
           docker run --network="caddy-network" -e XDEBUG_MODE=coverage -v $(pwd):/app docker.pkg.github.com/mattvb91/${{ env.REPO_NAME }}/composer:head php ./vendor/bin/phpunit --testdox --coverage-clover=coverage.xml

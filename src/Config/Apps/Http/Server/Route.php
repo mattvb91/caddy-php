@@ -30,7 +30,6 @@ class Route implements Arrayable
         $this->_group = $group;
     }
 
-
     public function addMatch($match): static
     {
         $this->_match[] = $match;

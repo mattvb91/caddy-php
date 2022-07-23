@@ -9,7 +9,9 @@ class Cache implements HandlerInterface
 
     public function toArray(): array
     {
-        return [];
+        return [
+            'handler' => $this->getHandler(),
+        ];
     }
 
     public function getHandler(): string

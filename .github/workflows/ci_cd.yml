@@ -103,3 +103,6 @@ jobs:
           directory: ./src
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: "output logs if fail"
+        if: failure()
+        run: docker logs caddy

@@ -72,7 +72,7 @@ jobs:
     needs:
       - build-caddy-image
       - build-composer-image
-    if: ${{ github.event_name == 'push' && github.actor != 'dependabot[bot]' && (needs.build-docker-php-head.result == 'success' || needs.build-docker-php-head.result == 'skipped') && (needs.build-docker-php-composer-head.result == 'success' || needs.build-docker-php-composer-head.result == 'skipped')  && !cancelled() }}
+    if: ${{ github.event_name == 'push' && (needs.build-composer-image.result == 'success' || needs.build-composer-image.result == 'skipped')  && !cancelled() }}
     steps:
       - name: Cancel Previous Run preventing duplicate pipelines
         uses: styfle/cancel-workflow-action@0.9.1

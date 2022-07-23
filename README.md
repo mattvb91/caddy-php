@@ -1,5 +1,11 @@
 # PHP Caddy Client
 
+[![.github/workflows/ci_cd.yml](https://github.com/mattvb91/caddy-php/actions/workflows/ci_cd.yml/badge.svg)](https://github.com/mattvb91/caddy-php/actions/workflows/ci_cd.yml)
+[![codecov](https://codecov.io/gh/mattvb91/caddy-php/branch/develop/graph/badge.svg?token=RYFGX2AW6J)](https://codecov.io/gh/mattvb91/caddy-php)
+<a href="https://packagist.org/packages/mattvb91/caddy-php"><img src="https://img.shields.io/packagist/dt/mattvb91/caddy-php" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/mattvb91/caddy-php"><img src="https://img.shields.io/packagist/v/mattvb91/caddy-php" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/mattvb91/caddy-php"><img src="https://img.shields.io/packagist/l/mattvb91/caddy-php" alt="License"></a>
+
 ### Control your Caddy instance through PHP
 
 This is more of a proof of concept rather than a fully working project. This tries to replicate

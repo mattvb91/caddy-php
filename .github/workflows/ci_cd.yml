@@ -91,6 +91,8 @@ jobs:
           docker network create -d bridge caddy-network
           docker run --entrypoint caddy --name caddy -d --network="caddy-network" -v "$(pwd)/docker/caddy:/config" -p 80:80 -p 2019:2019 docker.pkg.github.com/mattvb91/caddy-php/caddy:head run --resume
           docker run -v $(pwd):/app composer composer install
+          docker ps
+          docker network inspect caddy-network
           docker run --network="caddy-network" -e XDEBUG_MODE=coverage -v $(pwd):/app docker.pkg.github.com/mattvb91/${{ env.REPO_NAME }}/composer:head php ./vendor/bin/phpunit --testdox --coverage-clover=coverage.xml
         env:
           REPO_NAME: ${{ github.event.repository.name }}

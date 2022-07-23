@@ -15,25 +15,23 @@ class CacheTest extends TestCase
         $cache = new Cache();
 
         $this->assertEquals([
-            'cache' => [
-                'api'       => [
-                    'basepath' => '/cache',
-                    'souin'    => [
-                        'basepath' => '/souin',
-                        'enable'   => true,
-                    ],
+            'api'       => [
+                'basepath' => '/cache',
+                'souin'    => [
+                    'basepath' => '/souin',
+                    'enable'   => true,
                 ],
-                'cdn'       => [
-                    'dynamic'  => true,
-                    'strategy' => 'hard',
-                ],
-                'log_level' => 'INFO',
-                'nuts'      => [
-                    'path' => '/tmp/nuts-souin',
-                ],
-                'stale'     => '3600s',
-                'ttl'       => '3600s',
             ],
+            'cdn'       => [
+                'dynamic'  => true,
+                'strategy' => 'hard',
+            ],
+            'log_level' => 'INFO',
+            'nuts'      => [
+                'path' => '/tmp/nuts-souin',
+            ],
+            'stale'     => '3600s',
+            'ttl'       => '3600s',
         ], $cache->ToArray());
     }
 }

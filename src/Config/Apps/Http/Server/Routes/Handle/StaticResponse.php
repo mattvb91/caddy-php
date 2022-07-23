@@ -16,7 +16,7 @@ class StaticResponse implements HandlerInterface
 
     private int $_statusCode;
 
-    public function __construct(string $body, int $statusCode)
+    public function __construct(string $body, int $statusCode = 200)
     {
         $this->_body = $body;
         $this->_statusCode = $statusCode;

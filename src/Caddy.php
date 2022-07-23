@@ -43,7 +43,7 @@ class Caddy implements Arrayable
                     'json' => $this->toArray(),
                 ])->getStatusCode() === 200;
         } catch (ClientException $e) {
-            throw new \Exception($e->getResponse()->getBody());
+            throw new \Exception($e->getResponse()->getBody() . PHP_EOL . json_encode($this->toArray(), JSON_PRETTY_PRINT));
         }
     }
 

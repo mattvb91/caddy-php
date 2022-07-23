@@ -6,15 +6,15 @@ use mattvb91\CaddyPhp\Config\Apps\Cache\Api;
 use mattvb91\CaddyPhp\Config\Apps\Cache\Cdn;
 use mattvb91\CaddyPhp\Config\Apps\Cache\Nuts;
 use mattvb91\CaddyPhp\Config\Logs\LogLevel;
-use mattvb91\CaddyPhp\Interfaces\Arrayable;
+use mattvb91\CaddyPhp\Interfaces\App;
 
-class Cache implements Arrayable
+class Cache implements App
 {
     private Api $_api;
 
     private Cdn $_cdn;
 
-    private Nuts $_nuts;
+    private ?Nuts $_nuts;
 
     private LogLevel $_logLevel = LogLevel::INFO;
 
@@ -67,14 +67,12 @@ class Cache implements Arrayable
     public function toArray(): array
     {
         return [
-            'cache' => [
-                'api'       => $this->_api->toArray(),
-                'cdn'       => $this->_cdn->toArray(),
-                'nuts'      => $this->_nuts->toArray(),
-                'log_level' => $this->_logLevel->value,
-                'stale'     => $this->_stale,
-                'ttl'       => $this->_ttl,
-            ]
+            'api'       => $this->_api->toArray(),
+            'cdn'       => $this->_cdn->toArray(),
+            'nuts'      => $this->_nuts->toArray(),
+            'log_level' => $this->_logLevel->value,
+            'stale'     => $this->_stale,
+            'ttl'       => $this->_ttl,
         ];
     }
 }

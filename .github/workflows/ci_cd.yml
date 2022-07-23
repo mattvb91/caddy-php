@@ -1,0 +1,100 @@
+on:
+  push:
+    paths-ignore:
+      - "**/*.md"
+
+concurrency:
+  group: ${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+
+  build-caddy-image:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' # Running this job only for develop branch
+    steps:
+      - name: Cancel Previous Run preventing duplicate pipelines
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+      - name: Checkout code
+        uses: actions/checkout@v3 # Checking out the repo
+      - name: Check for changes
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            php:
+              - 'docker/caddy/**'
+      - name: Build and Publish head caddy image
+        # run only if some file in 'src' folder was changed
+        if: steps.changes.outputs.php == 'true'
+        uses: VaultVulp/gp-docker-action@1.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Provide GITHUB_TOKEN to login into the GitHub Packages
+          image-name: caddy # Provide Docker image name
+          dockerfile: ./docker/caddy/Dockerfile
+          build-context: ./docker/caddy/
+          image-tag: head # Provide Docker image tag
+          pull-image: true # Raise the flag to try to pull image
+
+  build-composer-image:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' # Running this job only for develop branch
+    steps:
+      - name: Cancel Previous Run preventing duplicate pipelines
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+      - name: Checkout code
+        uses: actions/checkout@v3 # Checking out the repo
+      - name: Check for changes
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            php:
+              - 'docker/composer/**'
+      - name: Build and Publish head caddy image
+        # run only if some file in 'src' folder was changed
+        if: steps.changes.outputs.php == 'true'
+        uses: VaultVulp/gp-docker-action@1.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Provide GITHUB_TOKEN to login into the GitHub Packages
+          image-name: composer # Provide Docker image name
+          dockerfile: ./docker/composer/Dockerfile
+          build-context: ./docker/composer/
+          image-tag: head # Provide Docker image tag
+          pull-image: true # Raise the flag to try to pull image
+
+  phpunit:
+    runs-on: ubuntu-20.04
+    needs:
+      - build-caddy-image
+    if: ${{ github.event_name == 'push' && github.actor != 'dependabot[bot]' && (needs.build-docker-php-head.result == 'success' || needs.build-docker-php-head.result == 'skipped') && (needs.build-docker-php-composer-head.result == 'success' || needs.build-docker-php-composer-head.result == 'skipped')  && !cancelled() }}
+    steps:
+      - name: Cancel Previous Run preventing duplicate pipelines
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+      - name: Checkout code
+        uses: actions/checkout@v3 # Checking out the repo
+      - name: Login to github registry
+        if: steps.changes.outputs.backend == 'true' || github.ref == 'refs/heads/master'
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: PHPUnit
+        if: steps.changes.outputs.backend == 'true' || github.ref == 'refs/heads/master'
+        run: |
+          docker run -p 80:80 -p 2019:2019 docker.pkg.github.com/mattvb91/caddy-php/caddy:head
+          docker run -v $(pwd):/app composer composer install
+          docker run --network="caddy_php_default" -e XDEBUG_MODE=coverage -v $(pwd)/backend:/app docker.pkg.github.com/${{ env.REPO_NAME }}/php-composer:${{ env.IMAGE_TAG }} php artisan test --coverage-clover=coverage.xml
+      - uses: codecov/codecov-action@v3.1.0
+        with:
+          fail_ci_if_error: false
+          directory: ./src
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

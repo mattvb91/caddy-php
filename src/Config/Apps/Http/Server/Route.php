@@ -3,6 +3,7 @@
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server;
 
 use mattvb91\caddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
+use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Match\MatcherInterface;
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 /**
@@ -15,7 +16,6 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
  */
 class Route implements Arrayable
 {
-
     private ?string $_group;
 
     /** @var HandlerInterface[] */
@@ -25,20 +25,34 @@ class Route implements Arrayable
 
     private ?bool $_terminal;
 
-    public function setGroup(string $group)
+    public function setGroup(string $group): static
     {
         $this->_group = $group;
+
+        return $this;
     }
 
-    public function addMatch($match): static
+    public function addMatch(MatcherInterface $match): static
     {
-        $this->_match[] = $match;
+        if (!isset($this->_match)) {
+            $this->_match = [$match];
+        } else {
+            $this->_match[] = $match;
+        }
+
         return $this;
     }
 
     public function addHandle(HandlerInterface $handler): static
     {
         $this->_handle[] = $handler;
+
+        return $this;
+    }
+
+    public function setTerminal(bool $terminal): static
+    {
+        $this->_terminal = $terminal;
 
         return $this;
     }
@@ -54,6 +68,29 @@ class Route implements Arrayable
         $config['handle'] = [...array_map(static function (HandlerInterface $handler) {
             return $handler->toArray();
         }, $this->_handle)];
+
+        if (isset($this->_match)) {
+
+            $config['match'] = array_map(static function (MatcherInterface $matcher) {
+                return $matcher->toArray();
+            }, $this->_match);
+
+            /**
+             * TODO this is a brutal hack, check / test why we need to do this.
+             * Currently its when we have multiple matchers for example file & not
+             */
+            if (count($config['match']) > 1) {
+                $matches = [];
+                foreach ($config['match'] as $match) {
+                    $matches[array_key_first($match)] = array_pop($match);
+                }
+                $config['match'] = [$matches];
+            }
+        }
+
+        if (isset($this->_terminal)) {
+            $config['terminal'] = $this->_terminal;
+        }
 
         return $config;
     }

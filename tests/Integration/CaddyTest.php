@@ -64,7 +64,7 @@ class CaddyTest extends TestCase
                 (new Route())->addHandle(
                     new StaticResponse('phpunit', 200)
                 )
-            )->setListen([':80']))
+            ))
         );
 
         $this->assertTrue($caddy->load());

@@ -16,6 +16,13 @@ class Api implements Arrayable
         $this->_souin = $souin;
     }
 
+    public function setBasePath(string $basePath): static
+    {
+        $this->_basePath = $basePath;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return [

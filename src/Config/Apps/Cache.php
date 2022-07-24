@@ -4,6 +4,7 @@ namespace mattvb91\CaddyPhp\Config\Apps;
 
 use mattvb91\CaddyPhp\Config\Apps\Cache\Api;
 use mattvb91\CaddyPhp\Config\Apps\Cache\Cdn;
+use mattvb91\CaddyPhp\Config\Apps\Cache\Key;
 use mattvb91\CaddyPhp\Config\Apps\Cache\Nuts;
 use mattvb91\CaddyPhp\Config\Logs\LogLevel;
 use mattvb91\CaddyPhp\Interfaces\App;
@@ -17,6 +18,9 @@ class Cache implements App
     private ?Nuts $_nuts;
 
     private LogLevel $_logLevel = LogLevel::INFO;
+
+    /** @var Key[] */
+    private ?array $_cacheKeys;
 
     private string $_stale = '3600s';
 
@@ -34,39 +38,62 @@ class Cache implements App
         $this->_nuts = new Nuts();
     }
 
-    public function setApi(Api $api): void
+    public function setApi(Api $api): static
     {
         $this->_api = $api;
+
+        return $this;
     }
 
-    public function setCdn(Cdn $cdn): void
+    public function setCdn(Cdn $cdn): static
     {
         $this->_cdn = $cdn;
+
+        return $this;
     }
 
-    public function setLogLevel(LogLevel $logLevel): void
+    public function setLogLevel(LogLevel $logLevel): static
     {
         $this->_logLevel = $logLevel;
+
+        return $this;
     }
 
-    public function setStale(string $stale): void
+    public function setStale(string $stale): static
     {
         $this->_stale = $stale;
+
+        return $this;
     }
 
-    public function setTtl(string $ttl): void
+    public function setTtl(string $ttl): static
     {
         $this->_ttl = $ttl;
+
+        return $this;
     }
 
-    public function setNuts(Nuts $nuts): void
+    public function setNuts(Nuts $nuts): static
     {
         $this->_nuts = $nuts;
+
+        return $this;
+    }
+
+    public function addCacheKey(Key $key): static
+    {
+        if (!isset($this->_cacheKeys)) {
+            $this->_cacheKeys = [$key];
+        } else {
+            $this->_cacheKeys[] = $key;
+        }
+
+        return $this;
     }
 
     public function toArray(): array
     {
-        return [
+        $array = [
             'api'       => $this->_api->toArray(),
             'cdn'       => $this->_cdn->toArray(),
             'nuts'      => $this->_nuts->toArray(),
@@ -74,5 +101,13 @@ class Cache implements App
             'stale'     => $this->_stale,
             'ttl'       => $this->_ttl,
         ];
+
+        if (isset($this->_cacheKeys)) {
+            $array['cache_keys'] = array_map(static function (Key $key) {
+                return [$key->getPattern() => $key->toArray()];
+            }, $this->_cacheKeys)[0]; //TODO there has to be a better way than [0] access to get this level
+        }
+
+        return $array;
     }
 }

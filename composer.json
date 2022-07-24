@@ -2,6 +2,7 @@
   "name": "mattvb91/caddy-php",
   "version": "0.0.1-alpha",
   "type": "package",
+  "license": "MIT",
   "autoload": {
     "psr-4": {
       "mattvb91\\CaddyPhp\\": "src/"

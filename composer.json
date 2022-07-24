@@ -1,6 +1,6 @@
 {
   "name": "mattvb91/caddy-php",
-  "version": "0.0.1-alpha",
+  "description": "Control your Caddy instance through PHP",
   "type": "package",
   "license": "MIT",
   "autoload": {

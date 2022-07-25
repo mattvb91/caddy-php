@@ -93,46 +93,58 @@ This assumes the 3 hosts (Caddy, Node, PHP) are all docker containers and access
 the same docker network, so you may have to adjust your hostnames as required.
 
 ```php
-$apiReverseProxy = (new Http\Server\Routes\Handle\ReverseProxy())
-    ->addUpstream((new Http\Server\Routes\Handle\ReverseProxy\Upstream())
+use mattvb91\CaddyPhp\Caddy;
+use mattvb91\CaddyPhp\Config\Apps\Http;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Route;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\ReverseProxy;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\ReverseProxy\Transport\FastCGI;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\ReverseProxy\Upstream;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Subroute;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Match\Host;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Match\Path;
+
+$apiReverseProxy = (new ReverseProxy())
+    ->addUpstream((new Upstream())
         ->setDial('laravel-api:9000')
-    )->addTransport((new Http\Server\Routes\Handle\ReverseProxy\Transport\FastCGI())
+    )->addTransport((new FastCGI())
         ->setRoot('/app/public/index.php')
         ->setSplitPath([''])
     );
 
-$apiMatchPath = (new Http\Server\Routes\Match\Path())
+$apiMatchPath = (new Path())
     ->setPaths([
         '/api/*',
     ]);
 
-$backendAPIRoute = (new Http\Server\Route())
+$backendAPIRoute = (new Route())
     ->addHandle($apiReverseProxy)
     ->addMatch($apiMatchPath);
 
-$route = new Http\Server\Route();
-$route->addHandle((new Http\Server\Routes\Handle\Subroute())
+$route = new Route();
+$route->addHandle((new Subroute())
     ->addRoute($backendAPIRoute)
-    ->addRoute((new Http\Server\Route())
-        ->addHandle((new Http\Server\Routes\Handle\ReverseProxy())
-            ->addUpstream((new Http\Server\Routes\Handle\ReverseProxy\Upstream())
+    ->addRoute((new Route())
+        ->addHandle((new ReverseProxy())
+            ->addUpstream((new Upstream())
                 ->setDial('nextjs:3000')
             )
         )
     )
-)->addMatch((new Http\Server\Routes\Match\Host())
+)->addMatch((new Host())
     ->setHosts([
         'localhost',
     ])
 )->setTerminal(true);
 
-$caddy = new \mattvb91\CaddyPhp\Caddy();
+$caddy = new Caddy();
 $caddy->addApp((new Http())
-    ->addServer('myplatform', (new Http\Server())
+    ->addServer('myplatform', (new Server())
         ->addRoute($route)
     )
 );
 $caddy->load();
+
 ```
 
 This will post the following caddy config:

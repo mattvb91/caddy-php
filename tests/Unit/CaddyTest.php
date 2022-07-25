@@ -88,6 +88,26 @@ class CaddyTest extends TestCase
             'disabled' => true,
             'listen'   => ':2020'
         ], $admin->toArray());
+    }
 
+    /**
+     * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::toArray
+     * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setListen
+     * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::addRoute
+     */
+    public function test_server()
+    {
+        $server = (new Http\Server())
+            ->setListen([':122'])
+            ->addRoute(new Http\Server\Route());
+
+        $this->assertEquals([
+            'listen' => [':122'],
+            'routes' => [
+                [
+                    'handle' => []
+                ]
+            ],
+        ], $server->toArray());
     }
 }

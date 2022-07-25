@@ -25,11 +25,6 @@ class Admin implements Arrayable
      */
     private string $listen = ":2019";
 
-    public function isDisabled(): bool
-    {
-        return $this->disabled;
-    }
-
     public function setDisabled(bool $disabled): static
     {
         $this->disabled = $disabled;
@@ -53,7 +48,7 @@ class Admin implements Arrayable
     {
         return [
             'disabled' => $this->disabled,
-            'listen'   => $this->listen,
+            'listen'   => $this->getListen(),
         ];
     }
 }

@@ -11,7 +11,7 @@ use Tests\TestCase;
 class CacheTest extends TestCase
 {
     /**
-     * @coversNothing
+     * @covers \mattvb91\CaddyPhp\Caddy::addApp
      */
     public function test_request_returns_cache_header()
     {

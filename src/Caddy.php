@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use mattvb91\CaddyPhp\Config\Admin;
 use mattvb91\CaddyPhp\Config\Logging;
+use mattvb91\CaddyPhp\Exceptions\CaddyClientException;
 use mattvb91\caddyPhp\Interfaces\App;
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
@@ -20,16 +21,17 @@ class Caddy implements Arrayable
     /** @var App[] */
     private array $_apps;
 
-    public function __construct(?string $hostname = 'caddy', ?Admin $admin = new Admin())
+    public function __construct(?string $hostname = 'caddy', ?Admin $admin = new Admin(), ?Client $client = null)
     {
         $this->setAdmin($admin);
 
-        $this->_client = new Client([
-            'base_uri' => $hostname . $this->getAdmin()->getListen() . '/config',
-            'headers'  => [
-                'Content-Type' => 'application/json',
-            ],
-        ]);
+        $this->_client = $client ?? new Client([
+                    'base_uri' => $hostname . $this->getAdmin()->getListen() . '/config',
+                    'headers'  => [
+                        'Content-Type' => 'application/json',
+                    ],
+                ]
+            );
     }
 
     /**
@@ -43,7 +45,7 @@ class Caddy implements Arrayable
                     'json' => $this->toArray(),
                 ])->getStatusCode() === 200;
         } catch (ClientException $e) {
-            throw new \Exception($e->getResponse()->getBody() . PHP_EOL . json_encode($this->toArray(), JSON_PRETTY_PRINT));
+            throw new CaddyClientException($e->getResponse()->getBody() . PHP_EOL . json_encode($this->toArray(), JSON_PRETTY_PRINT));
         }
     }
 

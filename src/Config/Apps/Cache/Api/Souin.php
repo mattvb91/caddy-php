@@ -10,20 +10,18 @@ class Souin implements Arrayable
 
     private bool $_enable = true;
 
-    /**
-     * @param string $basePath
-     */
-    public function setBasePath(string $basePath): void
+    public function setBasePath(string $basePath): static
     {
         $this->_basePath = $basePath;
+
+        return $this;
     }
 
-    /**
-     * @param bool $enable
-     */
-    public function setEnable(bool $enable): void
+    public function setEnable(bool $enable): static
     {
         $this->_enable = $enable;
+
+        return $this;
     }
 
     public function toArray(): array

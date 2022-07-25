@@ -4,9 +4,14 @@ namespace Unit;
 
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use mattvb91\CaddyPhp\Caddy;
 use mattvb91\CaddyPhp\Config\Admin;
 use mattvb91\CaddyPhp\Config\Apps\Http;
+use mattvb91\CaddyPhp\Exceptions\CaddyClientException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CaddyTest extends TestCase
@@ -51,5 +56,19 @@ class CaddyTest extends TestCase
                 ],
             ],
         ], $caddy->toArray());
+    }
+
+    /**
+     * @covers \mattvb91\CaddyPhp\Caddy::load
+     */
+    public function test_client_exception()
+    {
+        /** @var MockObject|Caddy $mockClient */
+        $mockClient = $this->createPartialMock(Client::class, ['post']);
+        $mockClient->method('post')->willThrowException(new ClientException('error', new Request('post', '/'), new Response(500)));
+        $this->expectException(CaddyClientException::class);
+
+        $caddy = new Caddy(client: $mockClient);
+        $caddy->load();
     }
 }

@@ -12,6 +12,7 @@ class LoggingTest extends TestCase
 {
     /**
      * @covers \mattvb91\CaddyPhp\Caddy::setLogging
+     * @covers \mattvb91\CaddyPhp\Caddy::toArray
      */
     public function test_adding_default_log()
     {

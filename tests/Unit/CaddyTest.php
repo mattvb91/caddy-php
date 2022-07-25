@@ -71,4 +71,23 @@ class CaddyTest extends TestCase
         $caddy = new Caddy(client: $mockClient);
         $caddy->load();
     }
+
+    /**
+     * @covers \mattvb91\CaddyPhp\Config\Admin::setDisabled
+     * @covers \mattvb91\CaddyPhp\Config\Admin::setListen
+     * @covers \mattvb91\CaddyPhp\Config\Admin::toArray
+     * @covers \mattvb91\CaddyPhp\Config\Admin::getListen
+     */
+    public function test_admin()
+    {
+        $admin = (new Admin())
+            ->setDisabled(true)
+            ->setListen(':2020');
+
+        $this->assertEquals([
+            'disabled' => true,
+            'listen'   => ':2020'
+        ], $admin->toArray());
+
+    }
 }

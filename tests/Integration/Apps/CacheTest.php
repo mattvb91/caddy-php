@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use mattvb91\CaddyPhp\Caddy;
 use mattvb91\CaddyPhp\Config\Apps\Cache;
 use mattvb91\CaddyPhp\Config\Apps\Http;
+use mattvb91\CaddyPhp\Config\Logs\LogLevel;
 use Tests\TestCase;
 
 class CacheTest extends TestCase
@@ -40,5 +41,24 @@ class CacheTest extends TestCase
 
         $this->assertEquals('cache test', $request->getBody()->getContents());
         $this->assertStringContainsString('Souin;', $request->getHeader('cache-status')[0]);
+    }
+
+    /**
+     * @coversNothing
+     */
+    public function test_keys()
+    {
+        $caddy = new Caddy();
+
+        $cacheApi = new Cache\Api();
+        $cacheApi->setBasePath('/__cache');
+
+        $cache = new Cache($cacheApi);
+        $cache->setLogLevel(LogLevel::DEBUG)
+            ->setStale('0s')
+            ->addCacheKey(new Cache\Key(pattern: '/_next\/static/', disable_host: true));
+
+        $caddy->addApp($cache);
+        $this->assertCaddyConfigLoaded($caddy);
     }
 }

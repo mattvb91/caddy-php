@@ -12,18 +12,18 @@ class Key implements Arrayable
 
     private bool $_disable_body;
 
-    private bool $_disable_domain;
+    private bool $_disable_method;
 
     public function __construct(
         string $pattern,
         bool   $disable_host = false,
         bool   $disable_body = false,
-        bool   $disable_domain = false)
+        bool   $disable_method = false)
     {
         $this->_pattern = $pattern;
         $this->_disable_host = $disable_host;
         $this->_disable_body = $disable_body;
-        $this->_disable_domain = $disable_domain;
+        $this->_disable_method = $disable_method;
     }
 
     public function getPattern(): string
@@ -45,9 +45,9 @@ class Key implements Arrayable
         return $this;
     }
 
-    public function setDisableDomain(bool $disable_domain): static
+    public function setDisableMethod(bool $disable_domain): static
     {
-        $this->_disable_domain = $disable_domain;
+        $this->_disable_method = $disable_domain;
 
         return $this;
     }
@@ -57,7 +57,7 @@ class Key implements Arrayable
         return [
             'disable_host'   => $this->_disable_host,
             'disable_body'   => $this->_disable_body,
-            'disable_domain' => $this->_disable_domain,
+            'disable_method' => $this->_disable_method,
         ];
     }
 }

@@ -6,7 +6,10 @@
   "autoload": {
     "psr-4": {
       "mattvb91\\CaddyPhp\\": "src/"
-    }
+    },
+    "files": [
+      "src/Functions.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {

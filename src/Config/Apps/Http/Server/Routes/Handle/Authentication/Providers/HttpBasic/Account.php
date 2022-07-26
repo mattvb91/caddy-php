@@ -24,7 +24,7 @@ class Account implements Arrayable
     {
         $config = [
             'username' => $this->_username,
-            'password' => base64_encode($this->_password),
+            'password' => base64_encode(password_hash($this->_password, PASSWORD_BCRYPT)),
         ];
 
         if ($this->_salt) {

@@ -6,6 +6,9 @@ use GuzzleHttp\Client;
 use mattvb91\CaddyPhp\Caddy;
 use mattvb91\CaddyPhp\Config\Apps\Http;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Route;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication\Providers\HttpBasic;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication\Providers\HttpBasic\Account;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\StaticResponse;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Match\Host;
 use mattvb91\CaddyPhp\Config\Logging;
@@ -188,5 +191,50 @@ class CaddyTest extends TestCase
 
         $caddy->syncHosts('main');
         $this->assertCount(3, $mainHost->getHosts());
+    }
+
+    /**
+     * @coversNothing
+     */
+    public function test_http_basic_auth()
+    {
+        $caddy = new Caddy();
+        $caddy->addApp(
+            (new Http())->addServer(
+                'server1', (new Http\Server())->addRoute(
+                (new Route())
+                    ->addHandle((new Authentication())
+                        ->addProvider((new HttpBasic())
+                            ->addAccount(new Account('test', 'test123'))))
+                    ->addHandle(
+                        new StaticResponse('auth test', 200)
+                    )->addMatch((new Host('main'))
+                        ->setHosts([
+                            'localhost',
+                        ])
+                    )
+            ))
+        );
+        $caddy->load();
+
+        $client = new Client([
+            'base_uri'    => 'caddy',
+            'http_errors' => false,
+            'headers'     => [
+                'Host' => 'localhost',
+            ],
+        ]);
+
+        $request = $client->get('');
+        $this->assertEquals(401, $request->getStatusCode());
+
+        $request = $client->request('GET', '', [
+            'auth' => [
+                'test',
+                'test123',
+            ],
+        ]);
+        $this->assertEquals(200, $request->getStatusCode());
+
     }
 }

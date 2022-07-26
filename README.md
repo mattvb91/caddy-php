@@ -84,10 +84,86 @@ curl -v localhost
 Hello world       
 ```
 
+## Managing Hostnames
+
+If you are managing hostnames dynamically (in a database) and can't build out the config with a list of
+existing hostnames because you need to manage them at runtime you can do the following:
+
+The important part in this example is the `host_group_name` identifier which is later
+used to add / remove domains to this host.
+
+```php
+$caddy = new Caddy();
+$caddy->addApp(
+    (new Http())->addServer(
+        'server1', (new Http\Server())->addRoute(
+        (new Route())->addHandle(
+            new StaticResponse('host test', 200)
+        )->addMatch((new Host('host_group_name'))
+            ->setHosts(['localhost'])
+        )
+    )->addRoute((new Route())
+        ->addHandle(new StaticResponse('Not found', 404))
+        ->addMatch((new Host('notFound'))
+            ->setHosts(['*.localhost'])
+        )
+    ))
+);
+$caddy->load();
+```
+
+### Adding Hostnames
+
+Now later on in a script or event on your system you can get your caddy configuration object and post
+a new domain to it under that route:
+
+```php
+$caddy->addHostname('host_group_name', 'new.localhost')
+$caddy->addHostname('host_group_name', 'another.localhost')
+```
+
+```shell
+curl -v new.localhost
+> GET / HTTP/1.1
+> Host: new.localhost
+> 
+< HTTP/1.1 200 OK
+
+curl -v another.localhost
+> GET / HTTP/1.1
+> Host: another.localhost
+> 
+< HTTP/1.1 200 OK
+```
+
+### Removing Hostnames
+
+```php
+$caddy->syncHosts('host_group_name'); //Sync from caddy current hostname list
+
+$caddy->removeHostname('host_group_name', 'new.localhost');
+$caddy->removeHostname('host_group_name', 'another.localhost');
+```
+
+```shell
+curl -v new.localhost
+> GET / HTTP/1.1
+> Host: new.localhost
+> 
+< HTTP/1.1 404 Not Found
+
+curl -v another.localhost
+> GET / HTTP/1.1
+> Host: another.localhost
+> 
+< HTTP/1.1 404 Not Found
+```
+
 ### Advanced Example
 
 Let's take a case where you want to have a Node frontend and a PHP backend taking requests on the `/api/*` route.
-In this case the example breaks down to 2 reverse proxy's with a route matcher to filter the `/api/*` to the PHP upstream. 
+In this case the example breaks down to 2 reverse proxy's with a route matcher to filter the `/api/*` to the PHP
+upstream.
 
 This assumes the 3 hosts (Caddy, Node, PHP) are all docker containers and accessible by container name within
 the same docker network, so you may have to adjust your hostnames as required.
@@ -148,6 +224,7 @@ $caddy->load();
 ```
 
 This will post the following caddy config:
+
 ```json
 {
   "admin": {
@@ -224,6 +301,7 @@ This will post the following caddy config:
   }
 }
 ```
+
 ```shell
 curl -v localhost
 

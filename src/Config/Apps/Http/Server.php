@@ -4,12 +4,15 @@ namespace mattvb91\CaddyPhp\Config\Apps\Http;
 
 use mattvb91\caddyPhp\Config\Apps\Http\Server\Route;
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
+use mattvb91\CaddyPhp\Traits\IterableProps;
 
 /**
  * Servers is the list of servers, keyed by arbitrary names chosen at your discretion for your own convenience; the keys do not affect functionality.
  */
 class Server implements Arrayable
 {
+    use IterableProps;
+
     private array $_listen = [':80'];
 
     /** @var Route[] */

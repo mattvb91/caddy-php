@@ -274,4 +274,20 @@ class CaddyTest extends TestCase
 //
 //        $this->assertTrue($caddy->load());
 //    }
+
+    /**
+     * @covers \mattvb91\CaddyPhp\Caddy::getRemoteConfig
+     */
+    public function test_caddy_get_config()
+    {
+        $caddy = new Caddy();
+        $caddy->addApp((new Http())
+            ->addServer('test', (new Http\Server())
+                ->addRoute((new Route())
+                    ->addHandle((new StaticResponse('test'))))));
+        $caddy->load();
+
+        $this->assertEquals(json_decode(json_encode($caddy->toArray())), $caddy->getRemoteConfig());
+    }
+
 }

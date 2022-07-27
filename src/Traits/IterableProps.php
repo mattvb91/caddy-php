@@ -6,12 +6,7 @@ trait IterableProps
 {
     public function iterateAllProperties(): array
     {
-        $props = [];
-        foreach ($this as $key => $value) {
-            $props[$key] = &$value;
-        }
-
-        return $props;
+        return get_object_vars($this);
     }
 
 }

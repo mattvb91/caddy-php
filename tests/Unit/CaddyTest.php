@@ -10,6 +10,7 @@ use GuzzleHttp\Psr7\Response;
 use mattvb91\CaddyPhp\Caddy;
 use mattvb91\CaddyPhp\Config\Admin;
 use mattvb91\CaddyPhp\Config\Apps\Http;
+use mattvb91\CaddyPhp\Config\Apps\Tls;
 use mattvb91\CaddyPhp\Exceptions\CaddyClientException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -47,13 +48,15 @@ class CaddyTest extends TestCase
     public function test_can_add_app()
     {
         $caddy = new Caddy();
-        $caddy->addApp(new Http());
+        $caddy->addApp(new Http())
+            ->addApp(new Tls());
 
         self::assertArraySubset([
             'apps' => [
                 'http' => [
                     'servers' => [],
                 ],
+                'tls'  => [],
             ],
         ], $caddy->toArray());
     }
@@ -86,7 +89,7 @@ class CaddyTest extends TestCase
 
         $this->assertEquals([
             'disabled' => true,
-            'listen'   => ':2020'
+            'listen'   => ':2020',
         ], $admin->toArray());
     }
 
@@ -105,8 +108,8 @@ class CaddyTest extends TestCase
             'listen' => [':122'],
             'routes' => [
                 [
-                    'handle' => []
-                ]
+                    'handle' => [],
+                ],
             ],
         ], $server->toArray());
     }

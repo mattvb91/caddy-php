@@ -11,6 +11,7 @@ use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication\Provi
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication\Providers\HttpBasic\Account;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\StaticResponse;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Match\Host;
+use mattvb91\CaddyPhp\Config\Apps\Tls;
 use mattvb91\CaddyPhp\Config\Logging;
 use mattvb91\CaddyPhp\Config\Logs\Log;
 use PHPUnit\Framework\TestCase;
@@ -237,4 +238,40 @@ class CaddyTest extends TestCase
         $this->assertEquals(200, $request->getStatusCode());
 
     }
+
+    /**
+     * @coversNothing
+     *
+     * This works but causes a panic serve and crashes the caddy server during multiple test runs.
+     * Need to investigate
+     */
+//    public function test_can_boot_with_tls()
+//    {
+//        $caddy = new Caddy();
+//        $caddy->addApp(
+//            (new Http())->addServer(
+//                'server1', (new Http\Server())->addRoute(
+//                (new Route())->addHandle(
+//                    new StaticResponse('phpunit', 200)
+//                )
+//            ))
+//        )->addApp((new Tls())
+//            ->setAutomation((new Tls\Automation())
+//                ->setOnDemand((new Tls\Automation\OnDemand())
+//                    ->setAsk('/api/platform/domainCheck')
+//                    ->setRateLimit((new Tls\Automation\OnDemand\RateLimit())
+//                        ->setBurst('5')
+//                        ->setInterval('2m')
+//                    )
+//                )->addPolicies((new Tls\Automation\Policies())
+//                    ->addSubjects('*.localhost')
+//                    ->addIssuer((new Tls\Automation\Policies\Issuers\Acme())
+//                        ->setEmail('test@test.com')
+//                    )
+//                )
+//            )
+//        );
+//
+//        $this->assertTrue($caddy->load());
+//    }
 }

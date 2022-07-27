@@ -3,6 +3,7 @@
 namespace mattvb91\CaddyPhp\Config;
 
 use mattvb91\CaddyPhp\Config\Apps\Http;
+use mattvb91\CaddyPhp\Config\Apps\Tls;
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 /**

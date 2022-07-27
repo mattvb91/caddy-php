@@ -5,7 +5,6 @@ namespace mattvb91\CaddyPhp;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use mattvb91\CaddyPhp\Config\Admin;
-use mattvb91\CaddyPhp\Config\Apps\Http;
 use mattvb91\CaddyPhp\Config\Logging;
 use mattvb91\CaddyPhp\Exceptions\CaddyClientException;
 use mattvb91\caddyPhp\Interfaces\App;
@@ -13,12 +12,6 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Caddy implements Arrayable
 {
-    /**
-     * We need a reference to ourselves for adding domains and hosts
-     * dynamically later.
-     */
-    private static self $_instance;
-
     /**
      * This is the collection of hosts with the associated paths to where they are
      * in the config.
@@ -52,14 +45,6 @@ class Caddy implements Arrayable
                     ],
                 ]
             );
-
-        //Reference ourselves
-        self::$_instance = &$this;
-    }
-
-    public static function getInstance(): self
-    {
-        return self::$_instance;
     }
 
     /**

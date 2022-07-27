@@ -91,11 +91,14 @@ class CacheTest extends TestCase
         $this->assertCaddyConfigLoaded($caddy);
 
         $caddy->flushSurrogates(['test_cache_key']);
-        sleep(1);
 
         $client = new Client([
             'base_uri' => 'caddy',
         ]);
+
+        $client->request('PURGE', 'caddy/cache/souin/GET-caddy-/');
+        $client->request('PURGE', 'caddy/cache/souin/GET-localhost-/');
+        sleep(1);
 
         $request = $client->get('');
         $this->assertEquals(200, $request->getStatusCode());

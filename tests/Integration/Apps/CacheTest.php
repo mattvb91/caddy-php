@@ -61,4 +61,58 @@ class CacheTest extends TestCase
         $caddy->addApp($cache);
         $this->assertCaddyConfigLoaded($caddy);
     }
+
+    /**
+     * @covers \mattvb91\CaddyPhp\Caddy::flushSurrogates
+     */
+    public function test_surrogate_key_flush()
+    {
+        $caddy = new Caddy();
+
+        $http = new Http();
+        $server = new Http\Server();
+        $route = new Http\Server\Route();
+
+        $route->addHandle(new Http\Server\Routes\Handle\Cache())
+            ->addHandle((new Http\Server\Routes\Handle\StaticResponse('cache test'))
+                ->setHeaders([
+                        'Surrogate-Key' => [
+                            'test_cache_key',
+                        ],
+                    ]
+                )
+            );
+
+        $server->addRoute($route);
+        $http->addServer(key: 'cacheServer', server: $server);
+
+        $caddy->addApp(new Cache());
+        $caddy->addApp($http);
+        $this->assertCaddyConfigLoaded($caddy);
+
+        $caddy->flushSurrogates(['test_cache_key']);
+        sleep(1);
+
+        $client = new Client([
+            'base_uri' => 'caddy',
+        ]);
+
+        $request = $client->get('');
+        $this->assertEquals(200, $request->getStatusCode());
+
+        $this->assertEquals('cache test', $request->getBody()->getContents());
+        $this->assertStringContainsString('Souin; fwd=uri-miss; stored', $request->getHeader('cache-status')[0]);
+
+        $request = $client->get('');
+        $this->assertEquals(200, $request->getStatusCode());
+        $this->assertStringContainsString('Souin; hit;', $request->getHeader('cache-status')[0]);
+
+        $caddy->flushSurrogates(['test_cache_key']);
+        sleep(1);
+
+        $request = $client->get('');
+        $this->assertEquals(200, $request->getStatusCode());
+        $this->assertStringContainsString('Souin; fwd=uri-miss; stored', $request->getHeader('cache-status')[0]);
+
+    }
 }

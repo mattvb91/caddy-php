@@ -34,9 +34,13 @@ class Caddy implements Arrayable
     /** @var App[] */
     private array $_apps;
 
+    private $_hostname;
+
     public function __construct(?string $hostname = 'caddy', ?Admin $admin = new Admin(), ?Client $client = null)
     {
         $this->setAdmin($admin);
+
+        $this->_hostname = $hostname;
 
         $this->_client = $client ?? new Client([
                     'base_uri' => $hostname . $this->getAdmin()->getListen() . '/config',
@@ -96,6 +100,31 @@ class Caddy implements Arrayable
         }
 
         return false;
+    }
+
+    /**
+     * Get the current config of the caddy server.
+     *
+     * TODO we should be able to build our $caddy object back up from this.
+     * So instead of toArray we should be able to do fromArray() or something
+     */
+    public function getRemoteConfig(): object
+    {
+        return json_decode($this->_client->get('/config')->getBody(), false, 512, JSON_THROW_ON_ERROR);
+    }
+
+    /**
+     * This is responsible for flushing the individual caches of items on the caddy server.
+     */
+    public function flushSurrogates(array $surrogates): bool
+    {
+        //TODO this is missing the fact that you could customize your cache paths.
+
+        return $this->_client->request('PURGE', 'http://' . $this->_hostname . '/cache/souin', [
+                'headers' => [
+                    'Surrogate-Key' => implode(', ', $surrogates),
+                ],
+            ])->getStatusCode() === 204;
     }
 
     /**

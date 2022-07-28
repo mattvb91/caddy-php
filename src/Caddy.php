@@ -34,13 +34,20 @@ class Caddy implements Arrayable
     /** @var App[] */
     private array $_apps;
 
-    private $_hostname;
+    private string $_hostname;
 
-    public function __construct(?string $hostname = 'caddy', ?Admin $admin = new Admin(), ?Client $client = null)
+    private string $_cacheHostnameHeader;
+
+    public function __construct(
+        ?string $hostname = 'caddy',
+        ?Admin  $admin = new Admin(),
+        ?Client $client = null,
+        ?string $cacheHostnameHeader = 'localhost')
     {
         $this->setAdmin($admin);
 
         $this->_hostname = $hostname;
+        $this->_cacheHostnameHeader = $cacheHostnameHeader;
 
         $this->_client = $client ?? new Client([
                     'base_uri' => $hostname . $this->getAdmin()->getListen() . '/config',
@@ -123,6 +130,7 @@ class Caddy implements Arrayable
         return $this->_client->request('PURGE', 'http://' . $this->_hostname . '/cache/souin', [
                 'headers' => [
                     'Surrogate-Key' => implode(', ', $surrogates),
+                    'Host'          => $this->_cacheHostnameHeader,
                 ],
             ])->getStatusCode() === 204;
     }

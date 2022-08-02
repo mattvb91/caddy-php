@@ -251,7 +251,7 @@ class CaddyTest extends TestCase
 //        $caddy->addApp(
 //            (new Http())->addServer(
 //                'server1', (new Http\Server())->addRoute(
-//                (new Route())->addHandle(
+//                (new Routes())->addHandle(
 //                    new StaticResponse('phpunit', 200)
 //                )
 //            ))

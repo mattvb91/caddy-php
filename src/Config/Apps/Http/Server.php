@@ -18,6 +18,21 @@ class Server implements Arrayable
     /** @var Route[] */
     private array $_routes = [];
 
+    private int $_readTimeout;
+
+    private int $_readHeaderTimeout;
+
+    private int $_writeTimeout;
+
+    private int $_idleTimeout;
+
+    private int $_maxHeaderBytes;
+
+    private bool $_strictSniHost;
+
+    private bool $_experimentalHttp3;
+
+    private bool $_allowH2c;
 
     public function setListen(array $listen): static
     {
@@ -33,13 +48,110 @@ class Server implements Arrayable
         return $this;
     }
 
+    public function setRoutes(array $routes): static
+    {
+        $this->_routes = $routes;
+
+        return $this;
+    }
+
+    public function setReadTimeout(int $readTimeout): static
+    {
+        $this->_readTimeout = $readTimeout;
+
+        return $this;
+    }
+
+    public function setReadHeaderTimeout(int $readHeaderTimeout): static
+    {
+        $this->_readHeaderTimeout = $readHeaderTimeout;
+
+        return $this;
+    }
+
+    public function setWriteTimeout(int $writeTimeout): static
+    {
+        $this->_writeTimeout = $writeTimeout;
+
+        return $this;
+    }
+
+    public function setIdleTimeout(int $idleTimeout): static
+    {
+        $this->_idleTimeout = $idleTimeout;
+
+        return $this;
+    }
+
+    public function setMaxHeaderBytes(int $maxHeaderBytes): static
+    {
+        $this->_maxHeaderBytes = $maxHeaderBytes;
+
+        return $this;
+    }
+
+    public function setStrictSniHost(bool $strictSniHost): static
+    {
+        $this->_strictSniHost = $strictSniHost;
+
+        return $this;
+    }
+
+    public function setExperimentalHttp3(bool $experimentalHttp3): static
+    {
+        $this->_experimentalHttp3 = $experimentalHttp3;
+
+        return $this;
+    }
+
+    public function setAllowH2c(bool $allowH2c): static
+    {
+        $this->_allowH2c = $allowH2c;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
-        return [
+        $config = [
             'listen' => $this->_listen,
             'routes' => [...array_map(static function (Route $route) {
                 return $route->toArray();
             }, $this->_routes)],
         ];
+
+        if (isset($this->_readTimeout)) {
+            $config['read_timeout'] = $this->_readTimeout;
+        }
+
+        if (isset($this->_readHeaderTimeout)) {
+            $config['read_header_timeout'] = $this->_readHeaderTimeout;
+        }
+
+        if (isset($this->_writeTimeout)) {
+            $config['write_timeout'] = $this->_writeTimeout;
+        }
+
+        if (isset($this->_idleTimeout)) {
+            $config['idle_timeout'] = $this->_idleTimeout;
+        }
+
+        if (isset($this->_maxHeaderBytes)) {
+            $config['max_header_bytes'] = $this->_maxHeaderBytes;
+        }
+
+        if (isset($this->_strictSniHost)) {
+            $config['strict_sni_host'] = $this->_strictSniHost;
+        }
+
+        if (isset($this->_experimentalHttp3)) {
+            $config['experimental_http3'] = $this->_experimentalHttp3;
+        }
+
+        if (isset($this->_allowH2c)) {
+            $config['allow_h2c'] = $this->_allowH2c;
+        }
+
+        return $config;
     }
 }

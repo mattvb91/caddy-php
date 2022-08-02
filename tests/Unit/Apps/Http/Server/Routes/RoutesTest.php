@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Apps;
+namespace Tests\Unit\Apps\Http\Server\Routes;
 
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Route;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\StaticResponse;

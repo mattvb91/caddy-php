@@ -44,17 +44,27 @@ class CaddyTest extends TestCase
     /**
      * @covers \mattvb91\CaddyPhp\Caddy::toArray
      * @covers \mattvb91\CaddyPhp\Caddy::addApp
+     * @covers \mattvb91\CaddyPhp\Config\Apps\Http::setHttpPort
+     * @covers \mattvb91\CaddyPhp\Config\Apps\Http::setHttpsPort
+     * @covers \mattvb91\CaddyPhp\Config\Apps\Http::setGracePeriod
+     * @covers \mattvb91\CaddyPhp\Config\Apps\Http::toArray
      */
     public function test_can_add_app()
     {
         $caddy = new Caddy();
-        $caddy->addApp(new Http())
-            ->addApp(new Tls());
+        $caddy->addApp((new Http())
+            ->setHttpPort(1)
+            ->setHttpsPort(2)
+            ->setGracePeriod(3)
+        )->addApp(new Tls());
 
         self::assertArraySubset([
             'apps' => [
                 'http' => [
-                    'servers' => [],
+                    'http_port'    => 1,
+                    'https_port'   => 2,
+                    'grace_period' => 3,
+                    'servers'      => [],
                 ],
                 'tls'  => [],
             ],

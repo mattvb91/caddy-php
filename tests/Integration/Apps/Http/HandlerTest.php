@@ -3,6 +3,8 @@
 namespace Tests\Integration\Apps\Http;
 
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
+use mattvb91\CaddyPhp\Caddy;
+use mattvb91\CaddyPhp\Config\Apps\Http;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication\Providers\HttpBasic\Account;
 use Tests\TestCase;
@@ -44,4 +46,25 @@ class HandlerTest extends TestCase
             ],
         ], $handler->toArray());
     }
+
+    /**
+     * @coversNothing
+     */
+    public function test_error_handler()
+    {
+        $caddy = new Caddy();
+        $caddy->addApp((new Http())
+            ->addServer('errorServer', (new Http\Server())
+                ->addRoute((new Http\Server\Route())
+                    ->addHandle((new Http\Server\Routes\Handle\Error())
+                        ->setError("this is an error")
+                        ->setStatusCode(501)
+                    )
+                )
+            )
+        );
+
+        $this->assertCaddyConfigLoaded($caddy);
+    }
+
 }

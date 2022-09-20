@@ -118,4 +118,19 @@ class CacheTest extends TestCase
         $this->assertStringContainsString('Souin; fwd=uri-miss; stored', $request->getHeader('cache-status')[0]);
 
     }
+
+    /**
+     * @coversNothing
+     */
+    public function test_can_load_with_redis()
+    {
+        $caddy = new Caddy();
+
+        $cacheApi = new Cache\Api();
+        $cache = new Cache($cacheApi);
+        $cache->setRedis((new Cache\Redis('redis:6379')));
+
+        $caddy->addApp($cache);
+        $this->assertCaddyConfigLoaded($caddy);
+    }
 }

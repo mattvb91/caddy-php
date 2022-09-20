@@ -35,10 +35,6 @@ class Cache implements App
     {
         $this->_api = $_api;
         $this->_cdn = $_cdn;
-
-        //This shouldnt be here, we need to add optional named parameters
-        //to constructor instead
-        $this->_nuts = new Nuts();
     }
 
     public function setApi(Api $api): static

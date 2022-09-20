@@ -6,6 +6,7 @@ use mattvb91\CaddyPhp\Config\Apps\Cache\Api;
 use mattvb91\CaddyPhp\Config\Apps\Cache\Cdn;
 use mattvb91\CaddyPhp\Config\Apps\Cache\Key;
 use mattvb91\CaddyPhp\Config\Apps\Cache\Nuts;
+use mattvb91\CaddyPhp\Config\Apps\Cache\Redis;
 use mattvb91\CaddyPhp\Config\Logs\LogLevel;
 use mattvb91\CaddyPhp\Interfaces\App;
 
@@ -16,6 +17,8 @@ class Cache implements App
     private Cdn $_cdn;
 
     private ?Nuts $_nuts;
+
+    private ?Redis $_redis;
 
     private LogLevel $_logLevel = LogLevel::INFO;
 
@@ -80,6 +83,13 @@ class Cache implements App
         return $this;
     }
 
+    public function setRedis(?Redis $redis): static
+    {
+        $this->_redis = $redis;
+
+        return $this;
+    }
+
     public function addCacheKey(Key $key): static
     {
         if (!isset($this->_cacheKeys)) {
@@ -96,11 +106,18 @@ class Cache implements App
         $array = [
             'api'       => $this->_api->toArray(),
             'cdn'       => $this->_cdn->toArray(),
-            'nuts'      => $this->_nuts->toArray(),
             'log_level' => $this->_logLevel->value,
             'stale'     => $this->_stale,
             'ttl'       => $this->_ttl,
         ];
+
+        if (isset($this->_nuts)) {
+            $array['nuts'] = $this->_nuts->toArray();
+        }
+
+        if (isset($this->_redis)) {
+            $array['redis'] = $this->_redis->toArray();
+        }
 
         if (isset($this->_cacheKeys)) {
             $array['cache_keys'] = array_map(static function (Key $key) {

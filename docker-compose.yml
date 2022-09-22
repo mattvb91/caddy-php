@@ -7,6 +7,8 @@ services:
       context: ./docker/caddy
     restart: unless-stopped
     command: [ "caddy", "run", "--resume" ]
+    volumes:
+      - ./docker/caddy/files:/var/files
     ports:
       - "80:80"
       - "443:443"

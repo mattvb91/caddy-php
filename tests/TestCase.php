@@ -54,8 +54,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
             ->setWriteTimeout(3)
             ->setIdleTimeout(4)
             ->setMaxHeaderBytes(5)
-            ->setStrictSniHost(true)
-            ->setExperimentalHttp3(true)
-            ->setAllowH2c(true);
+            ->setStrictSniHost(true);
     }
 }

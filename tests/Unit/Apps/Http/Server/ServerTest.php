@@ -17,8 +17,6 @@ class ServerTest extends TestCase
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setIdleTimeout
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setMaxHeaderBytes
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setStrictSniHost
-     * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setExperimentalHttp3
-     * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setAllowH2c
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::toArray
      */
     public function test_server()
@@ -33,8 +31,6 @@ class ServerTest extends TestCase
             "idle_timeout"        => 4,
             "max_header_bytes"    => 5,
             "strict_sni_host"     => true,
-            "experimental_http3"  => true,
-            "allow_h2c"           => true,
         ], $server->toArray());
     }
 }

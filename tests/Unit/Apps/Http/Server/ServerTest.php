@@ -17,8 +17,6 @@ class ServerTest extends TestCase
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setIdleTimeout
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setMaxHeaderBytes
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setStrictSniHost
-     * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setExperimentalHttp3
-     * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setAllowH2c
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::toArray
      */
     public function test_server()

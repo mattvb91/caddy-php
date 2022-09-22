@@ -1,4 +1,4 @@
-FROM caddy:2.5.2-builder-alpine
+FROM caddy:2.6.0-builder-alpine
 
 RUN xcaddy build --with github.com/darkweak/souin/plugins/caddy@a2e88383a2bced983914cc12bde413ad8887b56d \
     --with github.com/darkweak/souin@a2e88383a2bced983914cc12bde413ad8887b56d

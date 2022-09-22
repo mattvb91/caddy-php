@@ -33,8 +33,6 @@ class ServerTest extends TestCase
             "idle_timeout"        => 4,
             "max_header_bytes"    => 5,
             "strict_sni_host"     => true,
-            "experimental_http3"  => true,
-            "allow_h2c"           => true,
         ], $server->toArray());
     }
 }

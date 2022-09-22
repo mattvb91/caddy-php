@@ -3,6 +3,7 @@
 namespace Tests\Integration\Apps\Http;
 
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
+use GuzzleHttp\Client;
 use mattvb91\CaddyPhp\Caddy;
 use mattvb91\CaddyPhp\Config\Apps\Http;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication;
@@ -67,4 +68,36 @@ class HandlerTest extends TestCase
         $this->assertCaddyConfigLoaded($caddy);
     }
 
+    /**
+     * @coversNothing
+     */
+    public function test_static_file_server_handler()
+    {
+        $caddy = new Caddy();
+        $caddy->addApp((new Http())
+            ->addServer('staticFileServer', (new Http\Server())
+                ->addRoute((new Http\Server\Route())
+                    ->addHandle((new Http\Server\Routes\Handle\FileServer())
+                        ->setRoot('/var/files')
+                    )
+                )
+            )
+        );
+
+        $this->assertCaddyConfigLoaded($caddy);
+
+        $client = new Client([
+            'base_uri'    => 'caddy',
+            'http_errors' => false,
+            'headers'     => [
+                'Host' => 'localhost',
+            ],
+        ]);
+
+        $request = $client->request('GET', 'caddy/');
+        $this->assertEquals(404, $request->getStatusCode());
+
+        $request = $client->request('GET', 'caddy/static.txt');
+        $this->assertEquals(200, $request->getStatusCode());
+    }
 }

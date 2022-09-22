@@ -30,10 +30,6 @@ class Server implements Arrayable
 
     private bool $_strictSniHost;
 
-    private bool $_experimentalHttp3;
-
-    private bool $_allowH2c;
-
     public function setListen(array $listen): static
     {
         $this->_listen = $listen;
@@ -97,20 +93,6 @@ class Server implements Arrayable
         return $this;
     }
 
-    public function setExperimentalHttp3(bool $experimentalHttp3): static
-    {
-        $this->_experimentalHttp3 = $experimentalHttp3;
-
-        return $this;
-    }
-
-    public function setAllowH2c(bool $allowH2c): static
-    {
-        $this->_allowH2c = $allowH2c;
-
-        return $this;
-    }
-
     public function toArray(): array
     {
         $config = [
@@ -142,14 +124,6 @@ class Server implements Arrayable
 
         if (isset($this->_strictSniHost)) {
             $config['strict_sni_host'] = $this->_strictSniHost;
-        }
-
-        if (isset($this->_experimentalHttp3)) {
-            $config['experimental_http3'] = $this->_experimentalHttp3;
-        }
-
-        if (isset($this->_allowH2c)) {
-            $config['allow_h2c'] = $this->_allowH2c;
         }
 
         return $config;

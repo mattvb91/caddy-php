@@ -11,6 +11,8 @@ class Response implements Arrayable
      */
     private ?array $_delete;
 
+    private ?array $_add;
+
     private bool $_deferred = false;
 
     public function addDeleteHeader(string $header): static
@@ -20,6 +22,13 @@ class Response implements Arrayable
         } else {
             $this->_delete[] = $header;
         }
+
+        return $this;
+    }
+
+    public function addHeader(string $name, string $value): static
+    {
+        $this->_add[$name] = [$value];
 
         return $this;
     }
@@ -37,6 +46,10 @@ class Response implements Arrayable
 
         if (isset($this->_delete)) {
             $array['delete'] = $this->_delete;
+        }
+
+        if (isset($this->_add)) {
+            $array['add'] = $this->_add;
         }
 
         $array['deferred'] = $this->_deferred;

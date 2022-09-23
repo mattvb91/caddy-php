@@ -100,4 +100,38 @@ class HandlerTest extends TestCase
         $request = $client->request('GET', 'caddy/static.txt');
         $this->assertEquals(200, $request->getStatusCode());
     }
+
+    /**
+     * @coversNothing
+     */
+    public function test_header_response()
+    {
+        $caddy = new Caddy();
+        $caddy->addApp((new Http())
+            ->addServer('staticFileServer', (new Http\Server())
+                ->addRoute((new Http\Server\Route())
+                    ->addHandle((new Http\Server\Routes\Handle\Headers())
+                        ->setResponse((new Http\Server\Routes\Handle\Headers\Response())
+                            ->addHeader('Cache-Status', 'public, max-age=3600')
+                        ))->addHandle((new Http\Server\Routes\Handle\FileServer())
+                        ->setRoot('/var/files')
+                    )
+                )
+            )
+        );
+
+        $this->assertCaddyConfigLoaded($caddy);
+
+        $client = new Client([
+            'base_uri'    => 'caddy',
+            'http_errors' => false,
+            'headers'     => [
+                'Host' => 'localhost',
+            ],
+        ]);
+
+        $request = $client->request('GET', 'caddy/static.txt');
+        $this->assertEquals(200, $request->getStatusCode());
+        $this->assertEquals('public, max-age=3600', $request->getHeader('Cache-Status')[0]);
+    }
 }

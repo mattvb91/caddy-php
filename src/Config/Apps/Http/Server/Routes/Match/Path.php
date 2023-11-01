@@ -6,11 +6,16 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Match\MatcherInterface;
 
 class Path implements MatcherInterface
 {
-    private array $_paths = [];
+    /** @var array<string> */
+    private array $paths = [];
 
+    /**
+     * @param array<string> $paths
+     * @return $this
+     */
     public function setPaths(array $paths): static
     {
-        $this->_paths = $paths;
+        $this->paths = $paths;
 
         return $this;
     }
@@ -18,7 +23,7 @@ class Path implements MatcherInterface
     public function toArray(): array
     {
         return [
-            'path' => $this->_paths,
+            'path' => $this->paths,
         ];
     }
 }

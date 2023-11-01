@@ -7,18 +7,18 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Api implements Arrayable
 {
-    private string $_basePath = '/cache';
+    private string $basePath = '/cache';
 
-    private Souin $_souin;
+    private Souin $souin;
 
     public function __construct(Souin $souin = new Souin())
     {
-        $this->_souin = $souin;
+        $this->souin = $souin;
     }
 
     public function setBasePath(string $basePath): static
     {
-        $this->_basePath = $basePath;
+        $this->basePath = $basePath;
 
         return $this;
     }
@@ -26,8 +26,8 @@ class Api implements Arrayable
     public function toArray(): array
     {
         return [
-            'basepath' => $this->_basePath,
-            'souin'    => $this->_souin->toArray(),
+            'basepath' => $this->basePath,
+            'souin'    => $this->souin->toArray(),
         ];
     }
 }

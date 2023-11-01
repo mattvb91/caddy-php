@@ -6,15 +6,12 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Match\MatcherInterface;
 
 class Not implements MatcherInterface
 {
-    private ?array $_not;
+    /** @var array<MatcherInterface>  */
+    private array $not = [];
 
     public function addNotMatcher(MatcherInterface $matcher): static
     {
-        if (!isset($this->_not)) {
-            $this->_not = [$matcher];
-        } else {
-            $this->_not[] = $matcher;
-        }
+        $this->not[] = $matcher;
 
         return $this;
     }
@@ -24,7 +21,7 @@ class Not implements MatcherInterface
         return [
             'not' => array_map(static function (MatcherInterface $matcher) {
                 return $matcher->toArray();
-            }, $this->_not),
+            }, $this->not),
         ];
     }
 }

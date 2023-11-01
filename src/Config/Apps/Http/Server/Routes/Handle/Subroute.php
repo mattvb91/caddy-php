@@ -10,11 +10,12 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
  */
 class Subroute implements HandlerInterface
 {
-    private array $_routes = [];
+    /** @var Route[]  */
+    private array $routes = [];
 
     public function addRoute(Route $route): static
     {
-        $this->_routes[] = $route;
+        $this->routes[] = $route;
 
         return $this;
     }
@@ -25,7 +26,8 @@ class Subroute implements HandlerInterface
             'handler' => $this->getHandler(),
             'routes'  => [...array_map(static function (Route $route) {
                 return $route->toArray();
-            }, $this->_routes)],
+            }, $this->routes)
+            ],
         ];
     }
 

@@ -6,20 +6,20 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Souin implements Arrayable
 {
-    private string $_basePath = '/souin';
+    private string $basePath = '/souin';
 
-    private bool $_enable = true;
+    private bool $enable = true;
 
     public function setBasePath(string $basePath): static
     {
-        $this->_basePath = $basePath;
+        $this->basePath = $basePath;
 
         return $this;
     }
 
     public function setEnable(bool $enable): static
     {
-        $this->_enable = $enable;
+        $this->enable = $enable;
 
         return $this;
     }
@@ -27,8 +27,8 @@ class Souin implements Arrayable
     public function toArray(): array
     {
         return [
-            'basepath' => $this->_basePath,
-            'enable'   => $this->_enable
+            'basepath' => $this->basePath,
+            'enable'   => $this->enable
         ];
     }
 }

@@ -6,11 +6,11 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
 
 class FileServer implements HandlerInterface
 {
-    private $_root = "";
+    private string $root = "";
 
     public function setRoot(string $root): static
     {
-        $this->_root = $root;
+        $this->root = $root;
 
         return $this;
     }
@@ -19,7 +19,7 @@ class FileServer implements HandlerInterface
     {
         return [
             'handler' => $this->getHandler(),
-            'root'    => $this->_root,
+            'root'    => $this->root,
         ];
     }
 

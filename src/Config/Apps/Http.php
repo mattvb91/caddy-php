@@ -10,39 +10,39 @@ class Http implements App
 {
     use IterableProps;
 
-    private int $_httpPort;
+    private int $httpPort;
 
-    private int $_httpsPort;
+    private int $httpsPort;
 
-    private int $_gracePeriod;
+    private int $gracePeriod;
 
     /** @var Server[] */
-    private array $_servers = [];
+    private array $servers = [];
 
     public function addServer(string $key, Server $server): static
     {
-        $this->_servers[$key] = $server;
+        $this->servers[$key] = $server;
 
         return $this;
     }
 
     public function setHttpPort(int $httpPort): static
     {
-        $this->_httpPort = $httpPort;
+        $this->httpPort = $httpPort;
 
         return $this;
     }
 
     public function setHttpsPort(int $httpsPort): static
     {
-        $this->_httpsPort = $httpsPort;
+        $this->httpsPort = $httpsPort;
 
         return $this;
     }
 
     public function setGracePeriod(int $gracePeriod): static
     {
-        $this->_gracePeriod = $gracePeriod;
+        $this->gracePeriod = $gracePeriod;
         return $this;
     }
 
@@ -50,22 +50,22 @@ class Http implements App
     {
         $config = [];
 
-        if (isset($this->_httpPort)) {
-            $config['http_port'] = $this->_httpPort;
+        if (isset($this->httpPort)) {
+            $config['http_port'] = $this->httpPort;
         }
 
-        if (isset($this->_httpsPort)) {
-            $config['https_port'] = $this->_httpsPort;
+        if (isset($this->httpsPort)) {
+            $config['https_port'] = $this->httpsPort;
         }
 
-        if (isset($this->_gracePeriod)) {
-            $config['grace_period'] = $this->_gracePeriod;
+        if (isset($this->gracePeriod)) {
+            $config['grace_period'] = $this->gracePeriod;
         }
 
         $servers = [];
         array_map(static function (Server $server, string $key) use (&$servers) {
             $servers[$key] = $server->toArray();
-        }, $this->_servers, array_keys($this->_servers));
+        }, $this->servers, array_keys($this->servers));
 
         $config['servers'] = $servers;
 

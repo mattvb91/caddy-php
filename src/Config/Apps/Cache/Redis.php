@@ -6,17 +6,17 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Redis implements Arrayable
 {
-    private string $_url;
+    private string $url;
 
     public function __construct(string $_url)
     {
-        $this->_url = $_url;
+        $this->url = $_url;
     }
 
     public function toArray(): array
     {
         return [
-            'url' => $this->_url,
+            'url' => $this->url,
         ];
     }
 }

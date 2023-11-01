@@ -11,22 +11,26 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
  */
 class StaticResponse implements HandlerInterface
 {
+    private ?string $body;
 
-    private ?string $_body;
+    private int $statusCode;
 
-    private int $_statusCode;
-
-    private array $_headers;
+    /** @var string[]  */
+    private array $headers;
 
     public function __construct(?string $body = null, int $statusCode = 200)
     {
-        $body ? $this->_body = $body : null;
-        $this->_statusCode = $statusCode;
+        $body ? $this->body = $body : null;
+        $this->statusCode = $statusCode;
     }
 
+    /**
+     * @param string[] $headers
+     * @return $this
+     */
     public function setHeaders(array $headers): static
     {
-        $this->_headers = $headers;
+        $this->headers = $headers;
 
         return $this;
     }
@@ -35,15 +39,15 @@ class StaticResponse implements HandlerInterface
     {
         $config = [
             'handler'     => $this->getHandler(),
-            'status_code' => $this->_statusCode,
+            'status_code' => $this->statusCode,
         ];
 
-        if (isset($this->_body)) {
-            $config['body'] = $this->_body;
+        if (isset($this->body)) {
+            $config['body'] = $this->body;
         }
 
-        if (isset($this->_headers)) {
-            $config['headers'] = $this->_headers;
+        if (isset($this->headers)) {
+            $config['headers'] = $this->headers;
         }
 
         return $config;

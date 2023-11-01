@@ -14,15 +14,15 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
  */
 class Logging implements Arrayable
 {
-    /** @var Log[] $_logs */
-    private $_logs = [];
+    /** @var Log[] $logs */
+    private $logs = [];
 
-    public function addLog(Log $log, ?string $name = 'default')
+    public function addLog(Log $log, ?string $name = 'default'): static
     {
-        if (array_key_exists('', $this->_logs)) {
+        if (array_key_exists('', $this->logs)) {
             throw new \Exception('Log with this name alread exists');
         }
-        $this->_logs[$name] = $log;
+        $this->logs[$name] = $log;
 
         return $this;
     }
@@ -33,7 +33,7 @@ class Logging implements Arrayable
 
         array_map(function (string $key, Log $log) use (&$logs) {
             $logs[$key] = $log->toArray();
-        }, array_keys($this->_logs), $this->_logs);
+        }, array_keys($this->logs), $this->logs);
 
         return [
             'logs' => $logs,

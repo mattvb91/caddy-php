@@ -9,11 +9,11 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
  */
 class Upstream implements Arrayable
 {
-    private ?string $_dial;
+    private ?string $dial;
 
     public function setDial(string $dial): static
     {
-        $this->_dial = $dial;
+        $this->dial = $dial;
 
         return $this;
     }
@@ -22,11 +22,10 @@ class Upstream implements Arrayable
     {
         $array = [];
 
-        if (isset($this->_dial)) {
-            $array['dial'] = $this->_dial;
+        if (isset($this->dial)) {
+            $array['dial'] = $this->dial;
         }
 
         return $array;
     }
-
 }

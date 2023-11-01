@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use mattvb91\CaddyPhp\Config\Apps\Http;
 use PHPUnit\Framework\TestCase;
+
 use function mattvb91\CaddyPhp\findHost;
 
 class MiscTest extends TestCase
@@ -11,7 +12,7 @@ class MiscTest extends TestCase
     /**
      * @covers \mattvb91\CaddyPhp\findHost
      */
-    public function test_finding_host()
+    public function testFindingHost()
     {
         $http = new Http();
         $server = new Http\Server();
@@ -33,5 +34,4 @@ class MiscTest extends TestCase
 
         $this->assertEquals($host, findHost($http, 'shops')['host']);
     }
-
 }

@@ -6,20 +6,20 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
 
 class Error implements HandlerInterface
 {
-    private string $_error;
+    private string $error;
 
-    private string|int $_statusCode;
+    private string|int $statusCode;
 
     public function setError(string $error): static
     {
-        $this->_error = $error;
+        $this->error = $error;
 
         return $this;
     }
 
     public function setStatusCode(int|string $statusCode): static
     {
-        $this->_statusCode = $statusCode;
+        $this->statusCode = $statusCode;
 
         return $this;
     }
@@ -31,12 +31,12 @@ class Error implements HandlerInterface
             'handler' => $this->getHandler()
         ];
 
-        if(isset($this->_error)) {
-            $config['error'] = $this->_error;
+        if (isset($this->error)) {
+            $config['error'] = $this->error;
         }
 
-        if(isset($this->_statusCode)) {
-            $config['status_code'] = $this->_statusCode;
+        if (isset($this->statusCode)) {
+            $config['status_code'] = $this->statusCode;
         }
 
         return $config;

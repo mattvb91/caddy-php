@@ -7,20 +7,20 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class OnDemand implements Arrayable
 {
-    private ?RateLimit $_rateLimit;
+    private ?RateLimit $rateLimit;
 
-    private ?string $_ask;
+    private ?string $ask;
 
     public function setRateLimit(RateLimit $rateLimit): static
     {
-        $this->_rateLimit = $rateLimit;
+        $this->rateLimit = $rateLimit;
 
         return $this;
     }
 
     public function setAsk(string $ask): static
     {
-        $this->_ask = $ask;
+        $this->ask = $ask;
 
         return $this;
     }
@@ -29,15 +29,14 @@ class OnDemand implements Arrayable
     {
         $config = [];
 
-        if (isset($this->_rateLimit)) {
-            $config['rate_limit'] = $this->_rateLimit->toArray();
+        if (isset($this->rateLimit)) {
+            $config['rate_limit'] = $this->rateLimit->toArray();
         }
 
-        if (isset($this->_ask)) {
-            $config['ask'] = $this->_ask;
+        if (isset($this->ask)) {
+            $config['ask'] = $this->ask;
         }
 
         return $config;
     }
-
 }

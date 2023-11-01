@@ -7,11 +7,11 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Dns implements Arrayable
 {
-    private ?ProviderInterface $_provider;
+    private ?ProviderInterface $provider;
 
     public function setProvider(ProviderInterface $provider): static
     {
-        $this->_provider = $provider;
+        $this->provider = $provider;
 
         return $this;
     }
@@ -20,11 +20,10 @@ class Dns implements Arrayable
     {
         $config = [];
 
-        if (isset($this->_provider)) {
-            $config['provider'] = $this->_provider->toArray();
+        if (isset($this->provider)) {
+            $config['provider'] = $this->provider->toArray();
         }
 
         return $config;
     }
-
 }

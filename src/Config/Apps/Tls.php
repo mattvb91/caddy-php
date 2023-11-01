@@ -10,11 +10,11 @@ use mattvb91\CaddyPhp\Interfaces\App;
  */
 class Tls implements App
 {
-    private ?Automation $_automation;
+    private ?Automation $automation;
 
     public function setAutomation(Automation $automation): static
     {
-        $this->_automation = $automation;
+        $this->automation = $automation;
 
         return $this;
     }
@@ -23,8 +23,8 @@ class Tls implements App
     {
         $config = [];
 
-        if (isset($this->_automation)) {
-            $config['automation'] = $this->_automation->toArray();
+        if (isset($this->automation)) {
+            $config['automation'] = $this->automation->toArray();
         }
 
         return $config;

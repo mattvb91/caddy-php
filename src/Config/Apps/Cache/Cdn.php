@@ -6,8 +6,8 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Cdn implements Arrayable
 {
-    private bool $_dynamic;
-    private string $_strategy;
+    private bool $dynamic;
+    private string $strategy;
 
     /**
      * @param bool $_dynamic
@@ -15,8 +15,8 @@ class Cdn implements Arrayable
      */
     public function __construct(bool $_dynamic = true, string $_strategy = 'hard')
     {
-        $this->_dynamic = $_dynamic;
-        $this->_strategy = $_strategy;
+        $this->dynamic = $_dynamic;
+        $this->strategy = $_strategy;
     }
 
     /**
@@ -24,7 +24,7 @@ class Cdn implements Arrayable
      */
     public function setDynamic(bool $dynamic): void
     {
-        $this->_dynamic = $dynamic;
+        $this->dynamic = $dynamic;
     }
 
     /**
@@ -32,15 +32,15 @@ class Cdn implements Arrayable
      */
     public function setStrategy(string $strategy): void
     {
-        $this->_strategy = $strategy;
+        $this->strategy = $strategy;
     }
 
 
     public function toArray(): array
     {
         return [
-            'dynamic'  => $this->_dynamic,
-            'strategy' => $this->_strategy
+            'dynamic'  => $this->dynamic,
+            'strategy' => $this->strategy
         ];
     }
 }

@@ -32,6 +32,9 @@ class TlsTest extends TestCase
                             )
                         )
                     )
+                )->addPolicies((new Tls\Automation\Policies())
+                    ->addSubjects('test.local')
+                    ->addIssuer(new Tls\Automation\Policies\Issuers\Internal())
                 )
             );
 
@@ -60,6 +63,16 @@ class TlsTest extends TestCase
                                         ],
                                     ],
                                 ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'subjects' => [
+                            'test.local',
+                        ],
+                        'issuers'  => [
+                            [
+                                'module' => 'internal',
                             ],
                         ],
                     ],

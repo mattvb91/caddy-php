@@ -2,7 +2,7 @@
 
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server;
 
-use mattvb91\caddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
+use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
 use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Match\MatcherInterface;
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
 use mattvb91\CaddyPhp\Traits\IterableProps;
@@ -11,7 +11,8 @@ use mattvb91\CaddyPhp\Traits\IterableProps;
  * Routes describes how this server will handle requests.
  * Routes are executed sequentially. First a route's matchers are evaluated, then its grouping.
  * If it matches and has not been mutually-excluded by its grouping, then its handlers are executed sequentially.
- * The sequence of invoked handlers comprises a compiled middleware chain that flows from each matching route and its handlers to the next.
+ * The sequence of invoked handlers comprises a compiled middleware chain that flows from each matching
+ * route and its handlers to the next.
  *
  * https://caddyserver.com/docs/json/apps/http/servers/routes/
  */
@@ -19,28 +20,29 @@ class Route implements Arrayable
 {
     use IterableProps;
 
-    private ?string $_group;
+    private ?string $group;
 
     /** @var HandlerInterface[] */
-    private array $_handle = [];
+    private array $handle = [];
 
-    private ?array $_match;
+    /** @var MatcherInterface[]|null  */
+    private ?array $match;
 
-    private ?bool $_terminal;
+    private ?bool $terminal;
 
     public function setGroup(string $group): static
     {
-        $this->_group = $group;
+        $this->group = $group;
 
         return $this;
     }
 
     public function addMatch(MatcherInterface $match): static
     {
-        if (!isset($this->_match)) {
-            $this->_match = [$match];
+        if (!isset($this->match)) {
+            $this->match = [$match];
         } else {
-            $this->_match[] = $match;
+            $this->match[] = $match;
         }
 
         return $this;
@@ -48,14 +50,14 @@ class Route implements Arrayable
 
     public function addHandle(HandlerInterface $handler): static
     {
-        $this->_handle[] = $handler;
+        $this->handle[] = $handler;
 
         return $this;
     }
 
     public function setTerminal(bool $terminal): static
     {
-        $this->_terminal = $terminal;
+        $this->terminal = $terminal;
 
         return $this;
     }
@@ -64,19 +66,19 @@ class Route implements Arrayable
     {
         $config = [];
 
-        if (isset($this->_group)) {
-            $config['group'] = $this->_group;
+        if (isset($this->group)) {
+            $config['group'] = $this->group;
         }
 
         $config['handle'] = [...array_map(static function (HandlerInterface $handler) {
             return $handler->toArray();
-        }, $this->_handle)];
+        }, $this->handle)
+        ];
 
-        if (isset($this->_match)) {
-
+        if (isset($this->match)) {
             $config['match'] = array_map(static function (MatcherInterface $matcher) {
                 return $matcher->toArray();
-            }, $this->_match);
+            }, $this->match);
 
             /**
              * TODO this is a brutal hack, check / test why we need to do this.
@@ -91,8 +93,8 @@ class Route implements Arrayable
             }
         }
 
-        if (isset($this->_terminal)) {
-            $config['terminal'] = $this->_terminal;
+        if (isset($this->terminal)) {
+            $config['terminal'] = $this->terminal;
         }
 
         return $config;

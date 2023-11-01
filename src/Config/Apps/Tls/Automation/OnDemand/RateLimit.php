@@ -6,20 +6,20 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class RateLimit implements Arrayable
 {
-    private ?string $_interval;
+    private ?string $interval;
 
-    private ?int $_burst;
+    private ?int $burst;
 
     public function setInterval(string $interval): static
     {
-        $this->_interval = $interval;
+        $this->interval = $interval;
 
         return $this;
     }
 
-    public function setBurst(string $burst): static
+    public function setBurst(int $burst): static
     {
-        $this->_burst = $burst;
+        $this->burst = $burst;
 
         return $this;
     }
@@ -29,12 +29,12 @@ class RateLimit implements Arrayable
     {
         $config = [];
 
-        if (isset($this->_interval)) {
-            $config['interval'] = $this->_interval;
+        if (isset($this->interval)) {
+            $config['interval'] = $this->interval;
         }
 
-        if (isset($this->_interval)) {
-            $config['burst'] = $this->_burst;
+        if (isset($this->interval)) {
+            $config['burst'] = $this->burst;
         }
 
         return $config;

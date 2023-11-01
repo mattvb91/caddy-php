@@ -9,6 +9,9 @@ class Cache implements HandlerInterface
 {
     private ?LogLevel $_logLevel;
 
+    /**
+     * @var string[]|null
+     */
     private ?array $_allowedHttpVerbs;
 
     private ?string $_defaultCacheControl;
@@ -20,6 +23,10 @@ class Cache implements HandlerInterface
         return $this;
     }
 
+    /**
+     * @param string[] $allowedHttpVerbs
+     * @return $this
+     */
     public function setAllowedHttpVerbs(array $allowedHttpVerbs): static
     {
         $this->_allowedHttpVerbs = $allowedHttpVerbs;

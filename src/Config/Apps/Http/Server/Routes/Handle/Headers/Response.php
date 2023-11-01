@@ -8,10 +8,14 @@ class Response implements Arrayable
 {
     /**
      * Names of HTTP header fields to delete.
+     * @var string[]
      */
-    private ?array $_delete;
+    private array $_delete = [];
 
-    private ?array $_add;
+    /**
+     * @var array<string, string[]>
+     */
+    private array $_add = [];
 
     private bool $_deferred = false;
 
@@ -44,11 +48,11 @@ class Response implements Arrayable
     {
         $array = [];
 
-        if (isset($this->_delete)) {
+        if (count($this->_delete)) {
             $array['delete'] = $this->_delete;
         }
 
-        if (isset($this->_add)) {
+        if (count($this->_add)) {
             $array['add'] = $this->_add;
         }
 

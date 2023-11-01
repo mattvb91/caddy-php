@@ -7,8 +7,10 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Policies implements Arrayable
 {
+    /** @var array<string>|null  */
     private ?array $_subjects;
 
+    /** @var array<IssuerInterface>|null  */
     private ?array $_issuers;
 
     public function addSubjects(string $subject): static

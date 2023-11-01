@@ -6,8 +6,13 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Match\MatcherInterface;
 
 class File implements MatcherInterface
 {
+    /** @var string[] */
     private array $_tryFiles;
 
+    /**
+     * @param string[] $paths
+     * @return $this
+     */
     public function setTryFiles(array $paths): static
     {
         $this->_tryFiles = $paths;

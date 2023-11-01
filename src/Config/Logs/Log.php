@@ -16,7 +16,7 @@ class Log implements Arrayable
 
     private LogLevel $_level;
 
-    public function __construct(?LogLevel $level = LogLevel::DEBUG)
+    public function __construct(LogLevel $level = LogLevel::DEBUG)
     {
         $this->_level = $level;
     }

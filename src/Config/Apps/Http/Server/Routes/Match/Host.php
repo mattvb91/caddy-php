@@ -12,6 +12,9 @@ class Host implements MatcherInterface
      */
     private string $_identifier;
 
+    /**
+     * @var array<string>
+     */
     private array $_hosts = [];
 
     public function __construct(string $identifier)
@@ -24,6 +27,10 @@ class Host implements MatcherInterface
         return $this->_identifier;
     }
 
+    /**
+     * @param array<string> $hosts
+     * @return $this
+     */
     public function setHosts(array $hosts): static
     {
         $this->_hosts = $hosts;
@@ -31,7 +38,7 @@ class Host implements MatcherInterface
         return $this;
     }
 
-    public function addHost(string $host)
+    public function addHost(string $host): void
     {
         $this->_hosts = [$host, ...$this->_hosts];
     }
@@ -40,12 +47,15 @@ class Host implements MatcherInterface
      * DO NOT CALL MANUALLY
      * This is used for when caddy->removeHostname() is called to keep this object in sync
      */
-    public function syncRemoveHost(string $hostname)
+    public function syncRemoveHost(string $hostname): void
     {
         unset($this->_hosts[array_search($hostname, $this->_hosts)]);
     }
 
-    public function getHosts()
+    /**
+     * @return string[]
+     */
+    public function getHosts(): array
     {
         return $this->_hosts;
     }

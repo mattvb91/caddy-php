@@ -4,10 +4,12 @@ namespace mattvb91\CaddyPhp;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use mattvb91\CaddyPhp\Config\Admin;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Match\Host;
 use mattvb91\CaddyPhp\Config\Logging;
 use mattvb91\CaddyPhp\Exceptions\CaddyClientException;
-use mattvb91\caddyPhp\Interfaces\App;
+use mattvb91\CaddyPhp\Interfaces\App;
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Caddy implements Arrayable
@@ -22,6 +24,10 @@ class Caddy implements Arrayable
      *
      * We need to build that path once based on the config and then cache it here. The format is
      * [ host_identifier => ['path' => '/anything', 'host' => &$host]
+     * @var array<string, array{
+     *         path: string,
+     *         host: Host
+     *      }>
      */
     private array $_hostsCache = [];
 
@@ -32,30 +38,29 @@ class Caddy implements Arrayable
     private ?Logging $_logging;
 
     /** @var App[] */
-    private array $_apps;
+    private array $_apps = [];
 
     private string $_hostname;
 
     private string $_cacheHostnameHeader;
 
     public function __construct(
-        ?string $hostname = 'caddy',
-        ?Admin  $admin = new Admin(),
-        ?Client $client = null,
-        ?string $cacheHostnameHeader = 'localhost')
+        string $hostname = 'caddy',
+        Admin  $admin = new Admin(),
+        Client $client = null,
+        string $cacheHostnameHeader = 'localhost')
     {
         $this->setAdmin($admin);
-
         $this->_hostname = $hostname;
         $this->_cacheHostnameHeader = $cacheHostnameHeader;
 
         $this->_client = $client ?? new Client([
-                    'base_uri' => $hostname . $this->getAdmin()->getListen() . '/config',
-                    'headers'  => [
-                        'Content-Type' => 'application/json',
-                    ],
-                ]
-            );
+                'base_uri' => $hostname . $this->getAdmin()->getListen() . '/config',
+                'headers'  => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]
+        );
     }
 
     /**
@@ -63,10 +68,11 @@ class Caddy implements Arrayable
      * your config you should sync your hosts from the caddy config before making any changes for example trying to remove
      * hosts
      */
-    public function syncHosts(string $hostIdentifier)
+    public function syncHosts(string $hostIdentifier): void
     {
         $this->buildHostsCache($hostIdentifier);
 
+        /** @var string[] $hosts */
         $hosts = json_decode($this->_client->get($this->_hostsCache[$hostIdentifier]['path'])->getBody(), true);
 
         $this->_hostsCache[$hostIdentifier]['host']->setHosts($hosts);
@@ -114,14 +120,20 @@ class Caddy implements Arrayable
      *
      * TODO we should be able to build our $caddy object back up from this.
      * So instead of toArray we should be able to do fromArray() or something
+     *
+     * @throws \JsonException|\GuzzleHttp\Exception\GuzzleException
      */
     public function getRemoteConfig(): object
     {
+        /** @var object */
         return json_decode($this->_client->get('/config')->getBody(), false, 512, JSON_THROW_ON_ERROR);
     }
 
     /**
      * This is responsible for flushing the individual caches of items on the caddy server.
+     *
+     * @throws GuzzleException
+     * @param string[] $surrogates
      */
     public function flushSurrogates(array $surrogates): bool
     {
@@ -158,7 +170,7 @@ class Caddy implements Arrayable
         return $this->_client;
     }
 
-    public function getAdmin(): ?Admin
+    public function getAdmin(): Admin
     {
         return $this->_admin;
     }
@@ -170,7 +182,7 @@ class Caddy implements Arrayable
         return $this;
     }
 
-    public function setLogging(Logging $logging)
+    public function setLogging(Logging $logging): static
     {
         $this->_logging = $logging;
 
@@ -179,13 +191,11 @@ class Caddy implements Arrayable
 
     public function addApp(App $app): static
     {
-        $namespace = strtolower(substr(strrchr(get_class($app), '\\'), 1));
+        /** @var string $name */
+        $name = strrchr(get_class($app), '\\');
+        $namespace = strtolower(substr($name, 1));
 
-        if (!isset($this->_apps)) {
-            $this->_apps = [$namespace => $app];
-        } else {
-            $this->_apps[$namespace] = $app;
-        }
+        $this->_apps[$namespace] = $app;
 
         return $this;
     }
@@ -202,7 +212,7 @@ class Caddy implements Arrayable
             $config['logging'] = $this->_logging->toArray();
         }
 
-        if (isset($this->_apps)) {
+        if (count($this->_apps)) {
             $apps = [];
 
             array_map(static function (App $app, string $appNamespace) use (&$apps) {
@@ -215,12 +225,17 @@ class Caddy implements Arrayable
         return $config;
     }
 
+    /**
+     * @param string $hostIdentifier
+     * @return void
+     * @throws \Exception
+     */
     protected function buildHostsCache(string $hostIdentifier): void
     {
-        if (!in_array($hostIdentifier, $this->_hostsCache, true)) {
+        if (!key_exists($hostIdentifier, $this->_hostsCache)) {
             //Find the host so we can get its path
 
-            $hostPath = '';
+            $hostPath = null;
             foreach ($this->_apps as $app) {
                 if ($found = findHost($app, $hostIdentifier)) {
                     $hostPath = $found;

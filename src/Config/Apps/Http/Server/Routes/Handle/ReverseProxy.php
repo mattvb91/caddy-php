@@ -11,8 +11,10 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\ReverseProxy\Transpo
  */
 class ReverseProxy implements HandlerInterface
 {
+    /** @var Upstream[]|null  */
     private ?array $_upstreams;
 
+    /** @var TransportInterface[]|null  */
     private ?array $_transport;
 
     public function addUpstream(Upstream $upstream): static

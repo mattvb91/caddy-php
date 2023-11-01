@@ -11,6 +11,7 @@ class FastCGI implements TransportInterface
 {
     private ?string $_root;
 
+    /** @var string[]|null  */
     private ?array $_splitPath;
 
     public function setRoot(string $root): static
@@ -20,6 +21,10 @@ class FastCGI implements TransportInterface
         return $this;
     }
 
+    /**
+     * @param string[] $splitPath
+     * @return $this
+     */
     public function setSplitPath(array $splitPath): static
     {
         $this->_splitPath = $splitPath;

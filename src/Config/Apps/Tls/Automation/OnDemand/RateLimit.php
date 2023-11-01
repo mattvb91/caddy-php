@@ -17,7 +17,7 @@ class RateLimit implements Arrayable
         return $this;
     }
 
-    public function setBurst(string $burst): static
+    public function setBurst(int $burst): static
     {
         $this->_burst = $burst;
 

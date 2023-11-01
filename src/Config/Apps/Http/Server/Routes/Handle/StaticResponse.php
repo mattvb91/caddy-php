@@ -16,6 +16,7 @@ class StaticResponse implements HandlerInterface
 
     private int $_statusCode;
 
+    /** @var string[]  */
     private array $_headers;
 
     public function __construct(?string $body = null, int $statusCode = 200)
@@ -24,6 +25,10 @@ class StaticResponse implements HandlerInterface
         $this->_statusCode = $statusCode;
     }
 
+    /**
+     * @param string[] $headers
+     * @return $this
+     */
     public function setHeaders(array $headers): static
     {
         $this->_headers = $headers;

@@ -6,7 +6,7 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
 
 class FileServer implements HandlerInterface
 {
-    private $_root = "";
+    private string $_root = "";
 
     public function setRoot(string $root): static
     {

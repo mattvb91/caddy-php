@@ -2,7 +2,7 @@
 
 namespace mattvb91\CaddyPhp\Config\Apps\Http;
 
-use mattvb91\caddyPhp\Config\Apps\Http\Server\Route;
+use mattvb91\CaddyPhp\Config\Apps\Http\Server\Route;
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
 use mattvb91\CaddyPhp\Traits\IterableProps;
 
@@ -13,6 +13,7 @@ class Server implements Arrayable
 {
     use IterableProps;
 
+    /** @var string[] */
     private array $_listen = [':80'];
 
     /** @var Route[] */
@@ -30,6 +31,10 @@ class Server implements Arrayable
 
     private bool $_strictSniHost;
 
+    /**
+     * @param string[] $listen
+     * @return $this
+     */
     public function setListen(array $listen): static
     {
         $this->_listen = $listen;
@@ -44,6 +49,10 @@ class Server implements Arrayable
         return $this;
     }
 
+    /**
+     * @param Route[] $routes
+     * @return $this
+     */
     public function setRoutes(array $routes): static
     {
         $this->_routes = $routes;

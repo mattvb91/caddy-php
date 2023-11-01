@@ -2,7 +2,7 @@
 
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server;
 
-use mattvb91\caddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
+use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
 use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Match\MatcherInterface;
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
 use mattvb91\CaddyPhp\Traits\IterableProps;
@@ -24,6 +24,7 @@ class Route implements Arrayable
     /** @var HandlerInterface[] */
     private array $_handle = [];
 
+    /** @var MatcherInterface[]|null  */
     private ?array $_match;
 
     private ?bool $_terminal;

@@ -17,7 +17,7 @@ class Logging implements Arrayable
     /** @var Log[] $_logs */
     private $_logs = [];
 
-    public function addLog(Log $log, ?string $name = 'default')
+    public function addLog(Log $log, ?string $name = 'default'): static
     {
         if (array_key_exists('', $this->_logs)) {
             throw new \Exception('Log with this name alread exists');

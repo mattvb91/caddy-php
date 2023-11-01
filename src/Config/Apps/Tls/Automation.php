@@ -10,6 +10,7 @@ class Automation implements Arrayable
 {
     private ?OnDemand $_onDemand;
 
+    /** @var array<Policies>|null  */
     private ?array $_policies;
 
     public function setOnDemand(OnDemand $onDemand): static

@@ -10,6 +10,7 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
  */
 class Subroute implements HandlerInterface
 {
+    /** @var Route[]  */
     private array $_routes = [];
 
     public function addRoute(Route $route): static

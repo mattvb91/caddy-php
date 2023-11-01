@@ -26,7 +26,7 @@ class CaddyTest extends TestCase
      * @covers \mattvb91\CaddyPhp\Caddy::getClient
      * @covers \mattvb91\CaddyPhp\Caddy::__construct
      */
-    public function test_can_instantiate(): void
+    public function testCanInstantiate(): void
     {
         $caddy = new Caddy();
         $this->assertInstanceOf(Caddy::class, $caddy);
@@ -49,13 +49,14 @@ class CaddyTest extends TestCase
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http::setGracePeriod
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http::toArray
      */
-    public function test_can_add_app()
+    public function testCanAddApp()
     {
         $caddy = new Caddy();
-        $caddy->addApp((new Http())
-            ->setHttpPort(1)
-            ->setHttpsPort(2)
-            ->setGracePeriod(3)
+        $caddy->addApp(
+            (new Http())
+                ->setHttpPort(1)
+                ->setHttpsPort(2)
+                ->setGracePeriod(3)
         )->addApp(new Tls());
 
         self::assertArraySubset([
@@ -74,11 +75,17 @@ class CaddyTest extends TestCase
     /**
      * @covers \mattvb91\CaddyPhp\Caddy::load
      */
-    public function test_client_exception()
+    public function testClientException()
     {
         /** @var MockObject|Caddy $mockClient */
         $mockClient = $this->createPartialMock(Client::class, ['post']);
-        $mockClient->method('post')->willThrowException(new ClientException('error', new Request('post', '/'), new Response(500)));
+        $mockClient->method('post')->willThrowException(
+            new ClientException(
+                'error',
+                new Request('post', '/'),
+                new Response(500)
+            )
+        );
         $this->expectException(CaddyClientException::class);
 
         $caddy = new Caddy(client: $mockClient);
@@ -91,7 +98,7 @@ class CaddyTest extends TestCase
      * @covers \mattvb91\CaddyPhp\Config\Admin::toArray
      * @covers \mattvb91\CaddyPhp\Config\Admin::getListen
      */
-    public function test_admin()
+    public function testAdmin()
     {
         $admin = (new Admin())
             ->setDisabled(true)
@@ -108,7 +115,7 @@ class CaddyTest extends TestCase
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::setListen
      * @covers \mattvb91\CaddyPhp\Config\Apps\Http\Server::addRoute
      */
-    public function test_server()
+    public function testServer()
     {
         $server = (new Http\Server())
             ->setListen([':122'])

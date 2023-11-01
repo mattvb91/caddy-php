@@ -21,7 +21,7 @@ class CaddyTest extends TestCase
     /**
      * @covers \mattvb91\CaddyPhp\Caddy::load
      */
-    public function test_can_load_config(): void
+    public function testCanLoadConfig(): void
     {
         $caddy = new Caddy();
 
@@ -31,11 +31,12 @@ class CaddyTest extends TestCase
     /**
      * @coversNothing
      */
-    public function test_can_load_with_logs(): void
+    public function testCanLoadWithLogs(): void
     {
         $caddy = new Caddy();
-        $caddy->setLogging((new Logging())
-            ->addLog(new Log())
+        $caddy->setLogging(
+            (new Logging())
+                ->addLog(new Log())
         );
 
         $this->assertTrue($caddy->load());
@@ -44,32 +45,36 @@ class CaddyTest extends TestCase
     /**
      * @coversNothing
      */
-    public function test_can_load_with_http_app(): void
+    public function testCanLoadWithHttpApp(): void
     {
         $caddy = new Caddy();
         $caddy->addApp(
             (new Http())->addServer(
-                'server1', (new Http\Server())->addRoute(
-                (new Route())
-            ))
-        );
-
-        $this->assertTrue($caddy->load());
-    }
-
-    /**
-     * @coversNothing
-     */
-    public function test_can_load_static_response_app(): void
-    {
-        $caddy = new Caddy();
-        $caddy->addApp(
-            (new Http())->addServer(
-                'server1', (new Http\Server())->addRoute(
-                (new Route())->addHandle(
-                    new StaticResponse('phpunit', 200)
+                'server1',
+                (new Http\Server())->addRoute(
+                    (new Route())
                 )
-            ))
+            )
+        );
+
+        $this->assertTrue($caddy->load());
+    }
+
+    /**
+     * @coversNothing
+     */
+    public function testCanLoadStaticResponseApp(): void
+    {
+        $caddy = new Caddy();
+        $caddy->addApp(
+            (new Http())->addServer(
+                'server1',
+                (new Http\Server())->addRoute(
+                    (new Route())->addHandle(
+                        new StaticResponse('phpunit', 200)
+                    )
+                )
+            )
         );
 
         $this->assertTrue($caddy->load());
@@ -89,23 +94,28 @@ class CaddyTest extends TestCase
      * @covers \mattvb91\CaddyPhp\Caddy::removeHostname
      * @covers \mattvb91\CaddyPhp\findHost
      */
-    public function test_can_add_remove_hosts()
+    public function testCanAddRemoveHosts()
     {
         $caddy = new Caddy();
         $caddy->addApp(
             (new Http())->addServer(
-                'server1', (new Http\Server())->addRoute(
-                (new Route())->addHandle(
-                    new StaticResponse('host test', 200)
-                )->addMatch((new Host('main'))
-                    ->setHosts(['test.localhost'])
+                'server1',
+                (new Http\Server())->addRoute(
+                    (new Route())->addHandle(
+                        new StaticResponse('host test', 200)
+                    )->addMatch(
+                        (new Host('main'))
+                            ->setHosts(['test.localhost'])
+                    )
+                )->addRoute(
+                    (new Route())
+                        ->addHandle(new StaticResponse('Not found', 404))
+                        ->addMatch(
+                            (new Host('notFound'))
+                                ->setHosts(['*.localhost'])
+                        )
                 )
-            )->addRoute((new Route())
-                ->addHandle(new StaticResponse('Not found', 404))
-                ->addMatch((new Host('notFound'))
-                    ->setHosts(['*.localhost'])
-                )
-            ))
+            )
         );
 
         $this->assertTrue($caddy->load());
@@ -159,22 +169,25 @@ class CaddyTest extends TestCase
     /**
      * @covers \mattvb91\CaddyPhp\Caddy::syncHosts
      */
-    public function test_sync_hosts_works()
+    public function testSyncHostsWorks()
     {
         $caddy = new Caddy();
         $caddy->addApp(
             (new Http())->addServer(
-                'server1', (new Http\Server())->addRoute(
-                (new Route())->addHandle(
-                    new StaticResponse('host test', 200)
-                )->addMatch((new Host('main'))
-                    ->setHosts([
-                        'test.localhost',
-                        'test2.localhost',
-                        'localhost',
-                    ])
+                'server1',
+                (new Http\Server())->addRoute(
+                    (new Route())->addHandle(
+                        new StaticResponse('host test', 200)
+                    )->addMatch(
+                        (new Host('main'))
+                            ->setHosts([
+                                'test.localhost',
+                                'test2.localhost',
+                                'localhost',
+                            ])
+                    )
                 )
-            ))
+            )
         );
         $caddy->load();
 
@@ -183,11 +196,13 @@ class CaddyTest extends TestCase
         $mainHost = new Host('main');
         $caddy->addApp(
             (new Http())->addServer(
-                'server1', (new Http\Server())->addRoute(
-                (new Route())->addHandle(
-                    new StaticResponse('host test', 200)
-                )->addMatch($mainHost)
-            ))
+                'server1',
+                (new Http\Server())->addRoute(
+                    (new Route())->addHandle(
+                        new StaticResponse('host test', 200)
+                    )->addMatch($mainHost)
+                )
+            )
         );
 
         $caddy->syncHosts('main');
@@ -197,24 +212,31 @@ class CaddyTest extends TestCase
     /**
      * @coversNothing
      */
-    public function test_http_basic_auth()
+    public function testHttpBasicAuth()
     {
         $caddy = new Caddy();
         $caddy->addApp(
             (new Http())->addServer(
-                'server1', (new Http\Server())->addRoute(
-                (new Route())
-                    ->addHandle((new Authentication())
-                        ->addProvider((new HttpBasic())
-                            ->addAccount(new Account('test', 'test123'))))
-                    ->addHandle(
-                        new StaticResponse('auth test', 200)
-                    )->addMatch((new Host('main'))
-                        ->setHosts([
-                            'localhost',
-                        ])
-                    )
-            ))
+                'server1',
+                (new Http\Server())->addRoute(
+                    (new Route())
+                        ->addHandle(
+                            (new Authentication())
+                                ->addProvider(
+                                    (new HttpBasic())
+                                        ->addAccount(new Account('test', 'test123'))
+                                )
+                        )
+                        ->addHandle(
+                            new StaticResponse('auth test', 200)
+                        )->addMatch(
+                            (new Host('main'))
+                                ->setHosts([
+                                    'localhost',
+                                ])
+                        )
+                )
+            )
         );
         $caddy->load();
 
@@ -236,7 +258,6 @@ class CaddyTest extends TestCase
             ],
         ]);
         $this->assertEquals(200, $request->getStatusCode());
-
     }
 
     /**
@@ -278,16 +299,22 @@ class CaddyTest extends TestCase
     /**
      * @covers \mattvb91\CaddyPhp\Caddy::getRemoteConfig
      */
-    public function test_caddy_get_config()
+    public function testCaddyGetConfig()
     {
         $caddy = new Caddy();
-        $caddy->addApp((new Http())
-            ->addServer('test', (new Http\Server())
-                ->addRoute((new Route())
-                    ->addHandle((new StaticResponse('test'))))));
+        $caddy->addApp(
+            (new Http())
+                ->addServer(
+                    'test',
+                    (new Http\Server())
+                        ->addRoute(
+                            (new Route())
+                                ->addHandle((new StaticResponse('test')))
+                        )
+                )
+        );
         $caddy->load();
 
         $this->assertEquals(json_decode(json_encode($caddy->toArray())), $caddy->getRemoteConfig());
     }
-
 }

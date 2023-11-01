@@ -18,19 +18,21 @@ class CacheTest extends TestCase
      * @covers \mattvb91\CaddyPhp\Config\Apps\Cache\Api\Souin::toArray
      * @covers \mattvb91\CaddyPhp\Config\Apps\Cache\Api\Souin::setEnable
      */
-    public function test_api()
+    public function testApi()
     {
-        $api = new Api((new Api\Souin())
-            ->setBasePath('/test2')
-            ->setEnable(false));
+        $api = new Api(
+            (new Api\Souin())
+                ->setBasePath('/test2')
+                ->setEnable(false)
+        );
         $api->setBasePath('/test');
 
         $this->assertEquals([
             'basepath' => '/test',
             'souin'    => [
                 'basepath' => '/test2',
-                'enable'   => false
-            ]
+                'enable'   => false,
+            ],
         ], $api->toArray());
     }
 }

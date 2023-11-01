@@ -6,7 +6,6 @@ use mattvb91\CaddyPhp\Config\Apps\Http;
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Match\Host;
 use mattvb91\CaddyPhp\Traits\IterableProps;
 
-
 /**
  * @param string|array<string, array<Http>|object|string>|object $objectToWalk
  * @param string $hostToFind
@@ -19,7 +18,11 @@ use mattvb91\CaddyPhp\Traits\IterableProps;
 function findHost(string|array|object $objectToWalk, string $hostToFind, string $path = ''): ?array
 {
     if ($objectToWalk instanceof Host) {
-        if ($objectToWalk->getIdentifier() === $hostToFind && str_contains($path, 'routes') && str_contains($path, 'match')) {
+        if (
+            $objectToWalk->getIdentifier() === $hostToFind &&
+            str_contains($path, 'routes') &&
+            str_contains($path, 'match')
+        ) {
             return [
                 'path' => '/config/apps/http' . str_replace('_', '', $path) . '/host',
                 'host' => &$objectToWalk,
@@ -33,7 +36,6 @@ function findHost(string|array|object $objectToWalk, string $hostToFind, string 
             if ($found = findHost($props, $hostToFind, $path)) {
                 return $found;
             }
-
         }
     }
 

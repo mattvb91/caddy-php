@@ -9,20 +9,20 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\Authentication\Provi
 class HttpBasic implements ProviderInterface
 {
     /** @var Account[] */
-    private array $_accounts = [];
+    private array $accounts = [];
 
-    private ?HashInterface $_hash;
+    private ?HashInterface $hash;
 
     public function addAccount(Account $account): static
     {
-        $this->_accounts[] = $account;
+        $this->accounts[] = $account;
 
         return $this;
     }
 
     public function setHash(HashInterface $hash): static
     {
-        $this->_hash = $hash;
+        $this->hash = $hash;
 
         return $this;
     }
@@ -31,14 +31,15 @@ class HttpBasic implements ProviderInterface
     {
         $config = [];
 
-        if (count($this->_accounts)) {
+        if (count($this->accounts)) {
             $config['accounts'] = [...array_map(function (Account $account) {
                 return $account->toArray();
-            }, $this->_accounts)];
+            }, $this->accounts)
+            ];
         }
 
-        if (isset($this->_hash)) {
-            $config['hash'] = $this->_hash->toArray();
+        if (isset($this->hash)) {
+            $config['hash'] = $this->hash->toArray();
         }
 
         return $config;
@@ -48,5 +49,4 @@ class HttpBasic implements ProviderInterface
     {
         return 'http_basic';
     }
-
 }

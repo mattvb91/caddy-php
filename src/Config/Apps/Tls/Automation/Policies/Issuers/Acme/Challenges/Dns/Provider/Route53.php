@@ -6,11 +6,11 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Tls\Automation\Policies\Issuers\Acme\Chall
 
 class Route53 implements ProviderInterface
 {
-    private ?int $_maxRetries;
+    private ?int $maxRetries;
 
     public function setMaxRetries(int $maxRetries): static
     {
-        $this->_maxRetries = $maxRetries;
+        $this->maxRetries = $maxRetries;
 
         return $this;
     }
@@ -21,8 +21,8 @@ class Route53 implements ProviderInterface
             'name' => $this->getProviderName(),
         ];
 
-        if (isset($this->_maxRetries)) {
-            $config['max_retries'] = $this->_maxRetries;
+        if (isset($this->maxRetries)) {
+            $config['max_retries'] = $this->maxRetries;
         }
 
         return $config;
@@ -32,5 +32,4 @@ class Route53 implements ProviderInterface
     {
         return 'route53';
     }
-
 }

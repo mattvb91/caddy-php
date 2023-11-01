@@ -29,53 +29,52 @@ class Caddy implements Arrayable
      *         host: Host
      *      }>
      */
-    private array $_hostsCache = [];
+    private array $hostsCache = [];
 
-    private Client $_client;
+    private Client $client;
 
-    private Admin $_admin;
+    private Admin $admin;
 
-    private ?Logging $_logging;
+    private ?Logging $logging;
 
     /** @var App[] */
-    private array $_apps = [];
+    private array $apps = [];
 
-    private string $_hostname;
+    private string $hostname;
 
-    private string $_cacheHostnameHeader;
+    private string $cacheHostnameHeader;
 
     public function __construct(
         string $hostname = 'caddy',
-        Admin  $admin = new Admin(),
+        Admin $admin = new Admin(),
         Client $client = null,
-        string $cacheHostnameHeader = 'localhost')
-    {
+        string $cacheHostnameHeader = 'localhost'
+    ) {
         $this->setAdmin($admin);
-        $this->_hostname = $hostname;
-        $this->_cacheHostnameHeader = $cacheHostnameHeader;
+        $this->hostname = $hostname;
+        $this->cacheHostnameHeader = $cacheHostnameHeader;
 
-        $this->_client = $client ?? new Client([
-                'base_uri' => $hostname . $this->getAdmin()->getListen() . '/config',
-                'headers'  => [
-                    'Content-Type' => 'application/json',
-                ],
-            ]
-        );
+        $this->client = $client ?? new Client([
+            'base_uri' => $hostname . $this->getAdmin()->getListen() . '/config',
+            'headers'  => [
+                'Content-Type' => 'application/json',
+            ],
+        ]);
     }
 
     /**
      * If you are managing your hosts from an external source (for example db) and not directly in
-     * your config you should sync your hosts from the caddy config before making any changes for example trying to remove
-     * hosts
+     * your config you should sync your hosts from the caddy config before
+     * making any changes for example trying to remove hosts
      */
     public function syncHosts(string $hostIdentifier): void
     {
         $this->buildHostsCache($hostIdentifier);
 
         /** @var string[] $hosts */
-        $hosts = json_decode($this->_client->get($this->_hostsCache[$hostIdentifier]['path'])->getBody(), true);
+        $hosts = json_decode($this->client->get($this->hostsCache[$hostIdentifier]['path'])->getBody(), true);
 
-        $this->_hostsCache[$hostIdentifier]['host']->setHosts($hosts);
+        $this->hostsCache[$hostIdentifier]['host']->setHosts($hosts);
     }
 
     /**
@@ -85,10 +84,12 @@ class Caddy implements Arrayable
     {
         $this->buildHostsCache($hostIdentifier);
 
-        if ($this->_client->put($this->_hostsCache[$hostIdentifier]['path'] . '/0', [
+        if (
+            $this->client->put($this->hostsCache[$hostIdentifier]['path'] . '/0', [
                 'json' => $hostname,
-            ])->getStatusCode() === 200) {
-            $this->_hostsCache[$hostIdentifier]['host']->addHost($hostname);
+            ])->getStatusCode() === 200
+        ) {
+            $this->hostsCache[$hostIdentifier]['host']->addHost($hostname);
             return true;
         }
 
@@ -102,13 +103,15 @@ class Caddy implements Arrayable
     {
         $this->buildHostsCache($hostIdentifier);
 
-        $path = $this->_hostsCache[$hostIdentifier]['path'];
-        $path = $path . '/' . array_search($hostname, $this->_hostsCache[$hostIdentifier]['host']->getHosts());
+        $path = $this->hostsCache[$hostIdentifier]['path'];
+        $path = $path . '/' . array_search($hostname, $this->hostsCache[$hostIdentifier]['host']->getHosts());
 
-        if ($this->_client->delete($path, [
+        if (
+            $this->client->delete($path, [
                 'json' => $hostname,
-            ])->getStatusCode() === 200) {
-            $this->_hostsCache[$hostIdentifier]['host']->syncRemoveHost($hostname);
+            ])->getStatusCode() === 200
+        ) {
+            $this->hostsCache[$hostIdentifier]['host']->syncRemoveHost($hostname);
             return true;
         }
 
@@ -126,25 +129,25 @@ class Caddy implements Arrayable
     public function getRemoteConfig(): object
     {
         /** @var object */
-        return json_decode($this->_client->get('/config')->getBody(), false, 512, JSON_THROW_ON_ERROR);
+        return json_decode($this->client->get('/config')->getBody(), false, 512, JSON_THROW_ON_ERROR);
     }
 
     /**
      * This is responsible for flushing the individual caches of items on the caddy server.
      *
-     * @throws GuzzleException
      * @param string[] $surrogates
+     * @throws GuzzleException
      */
     public function flushSurrogates(array $surrogates): bool
     {
         //TODO this is missing the fact that you could customize your cache paths.
 
-        return $this->_client->request('PURGE', 'http://' . $this->_hostname . '/cache/souin', [
-                'headers' => [
-                    'Surrogate-Key' => implode(', ', $surrogates),
-                    'Host'          => $this->_cacheHostnameHeader,
-                ],
-            ])->getStatusCode() === 204;
+        return $this->client->request('PURGE', 'http://' . $this->hostname . '/cache/souin', [
+            'headers' => [
+                'Surrogate-Key' => implode(', ', $surrogates),
+                'Host'          => $this->cacheHostnameHeader,
+            ],
+        ])->getStatusCode() === 204;
     }
 
     /**
@@ -154,11 +157,13 @@ class Caddy implements Arrayable
     public function load(): bool
     {
         try {
-            return $this->_client->post('/load', [
-                    'json' => $this->toArray(),
-                ])->getStatusCode() === 200;
+            return $this->client->post('/load', [
+                'json' => $this->toArray(),
+            ])->getStatusCode() === 200;
         } catch (ClientException $e) {
-            throw new CaddyClientException($e->getResponse()->getBody() . PHP_EOL . json_encode($this->toArray(), JSON_PRETTY_PRINT));
+            throw new CaddyClientException(
+                $e->getResponse()->getBody() . PHP_EOL . json_encode($this->toArray(), JSON_PRETTY_PRINT)
+            );
         }
     }
 
@@ -167,24 +172,24 @@ class Caddy implements Arrayable
      */
     public function getClient(): Client
     {
-        return $this->_client;
+        return $this->client;
     }
 
     public function getAdmin(): Admin
     {
-        return $this->_admin;
+        return $this->admin;
     }
 
     protected function setAdmin(Admin $admin): static
     {
-        $this->_admin = $admin;
+        $this->admin = $admin;
 
         return $this;
     }
 
     public function setLogging(Logging $logging): static
     {
-        $this->_logging = $logging;
+        $this->logging = $logging;
 
         return $this;
     }
@@ -195,7 +200,7 @@ class Caddy implements Arrayable
         $name = strrchr(get_class($app), '\\');
         $namespace = strtolower(substr($name, 1));
 
-        $this->_apps[$namespace] = $app;
+        $this->apps[$namespace] = $app;
 
         return $this;
     }
@@ -204,20 +209,20 @@ class Caddy implements Arrayable
     {
         $config = [];
 
-        if (isset($this->_admin)) {
-            $config['admin'] = $this->_admin->toArray();
+        if (isset($this->admin)) {
+            $config['admin'] = $this->admin->toArray();
         }
 
-        if (isset($this->_logging)) {
-            $config['logging'] = $this->_logging->toArray();
+        if (isset($this->logging)) {
+            $config['logging'] = $this->logging->toArray();
         }
 
-        if (count($this->_apps)) {
+        if (count($this->apps)) {
             $apps = [];
 
             array_map(static function (App $app, string $appNamespace) use (&$apps) {
                 $apps[$appNamespace] = $app->toArray();
-            }, $this->_apps, array_keys($this->_apps));
+            }, $this->apps, array_keys($this->apps));
 
             $config['apps'] = $apps;
         }
@@ -232,11 +237,11 @@ class Caddy implements Arrayable
      */
     protected function buildHostsCache(string $hostIdentifier): void
     {
-        if (!key_exists($hostIdentifier, $this->_hostsCache)) {
+        if (!key_exists($hostIdentifier, $this->hostsCache)) {
             //Find the host so we can get its path
 
             $hostPath = null;
-            foreach ($this->_apps as $app) {
+            foreach ($this->apps as $app) {
                 if ($found = findHost($app, $hostIdentifier)) {
                     $hostPath = $found;
                     break;
@@ -247,7 +252,7 @@ class Caddy implements Arrayable
                 throw new \Exception('Host does not exist. Check your host identified');
             }
 
-            $this->_hostsCache[$hostIdentifier] = $hostPath;
+            $this->hostsCache[$hostIdentifier] = $hostPath;
         }
     }
 }

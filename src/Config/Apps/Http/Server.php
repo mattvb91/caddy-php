@@ -7,29 +7,30 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 use mattvb91\CaddyPhp\Traits\IterableProps;
 
 /**
- * Servers is the list of servers, keyed by arbitrary names chosen at your discretion for your own convenience; the keys do not affect functionality.
+ * Servers is the list of servers, keyed by arbitrary names chosen at your discretion for your own convenience;
+ * the keys do not affect functionality.
  */
 class Server implements Arrayable
 {
     use IterableProps;
 
     /** @var string[] */
-    private array $_listen = [':80'];
+    private array $listen = [':80'];
 
     /** @var Route[] */
-    private array $_routes = [];
+    private array $routes = [];
 
-    private int $_readTimeout;
+    private int $readTimeout;
 
-    private int $_readHeaderTimeout;
+    private int $readHeaderTimeout;
 
-    private int $_writeTimeout;
+    private int $writeTimeout;
 
-    private int $_idleTimeout;
+    private int $idleTimeout;
 
-    private int $_maxHeaderBytes;
+    private int $maxHeaderBytes;
 
-    private bool $_strictSniHost;
+    private bool $strictSniHost;
 
     /**
      * @param string[] $listen
@@ -37,14 +38,14 @@ class Server implements Arrayable
      */
     public function setListen(array $listen): static
     {
-        $this->_listen = $listen;
+        $this->listen = $listen;
 
         return $this;
     }
 
     public function addRoute(Route $route): static
     {
-        $this->_routes[] = $route;
+        $this->routes[] = $route;
 
         return $this;
     }
@@ -55,49 +56,49 @@ class Server implements Arrayable
      */
     public function setRoutes(array $routes): static
     {
-        $this->_routes = $routes;
+        $this->routes = $routes;
 
         return $this;
     }
 
     public function setReadTimeout(int $readTimeout): static
     {
-        $this->_readTimeout = $readTimeout;
+        $this->readTimeout = $readTimeout;
 
         return $this;
     }
 
     public function setReadHeaderTimeout(int $readHeaderTimeout): static
     {
-        $this->_readHeaderTimeout = $readHeaderTimeout;
+        $this->readHeaderTimeout = $readHeaderTimeout;
 
         return $this;
     }
 
     public function setWriteTimeout(int $writeTimeout): static
     {
-        $this->_writeTimeout = $writeTimeout;
+        $this->writeTimeout = $writeTimeout;
 
         return $this;
     }
 
     public function setIdleTimeout(int $idleTimeout): static
     {
-        $this->_idleTimeout = $idleTimeout;
+        $this->idleTimeout = $idleTimeout;
 
         return $this;
     }
 
     public function setMaxHeaderBytes(int $maxHeaderBytes): static
     {
-        $this->_maxHeaderBytes = $maxHeaderBytes;
+        $this->maxHeaderBytes = $maxHeaderBytes;
 
         return $this;
     }
 
     public function setStrictSniHost(bool $strictSniHost): static
     {
-        $this->_strictSniHost = $strictSniHost;
+        $this->strictSniHost = $strictSniHost;
 
         return $this;
     }
@@ -105,34 +106,35 @@ class Server implements Arrayable
     public function toArray(): array
     {
         $config = [
-            'listen' => $this->_listen,
+            'listen' => $this->listen,
             'routes' => [...array_map(static function (Route $route) {
                 return $route->toArray();
-            }, $this->_routes)],
+            }, $this->routes)
+            ],
         ];
 
-        if (isset($this->_readTimeout)) {
-            $config['read_timeout'] = $this->_readTimeout;
+        if (isset($this->readTimeout)) {
+            $config['read_timeout'] = $this->readTimeout;
         }
 
-        if (isset($this->_readHeaderTimeout)) {
-            $config['read_header_timeout'] = $this->_readHeaderTimeout;
+        if (isset($this->readHeaderTimeout)) {
+            $config['read_header_timeout'] = $this->readHeaderTimeout;
         }
 
-        if (isset($this->_writeTimeout)) {
-            $config['write_timeout'] = $this->_writeTimeout;
+        if (isset($this->writeTimeout)) {
+            $config['write_timeout'] = $this->writeTimeout;
         }
 
-        if (isset($this->_idleTimeout)) {
-            $config['idle_timeout'] = $this->_idleTimeout;
+        if (isset($this->idleTimeout)) {
+            $config['idle_timeout'] = $this->idleTimeout;
         }
 
-        if (isset($this->_maxHeaderBytes)) {
-            $config['max_header_bytes'] = $this->_maxHeaderBytes;
+        if (isset($this->maxHeaderBytes)) {
+            $config['max_header_bytes'] = $this->maxHeaderBytes;
         }
 
-        if (isset($this->_strictSniHost)) {
-            $config['strict_sni_host'] = $this->_strictSniHost;
+        if (isset($this->strictSniHost)) {
+            $config['strict_sni_host'] = $this->strictSniHost;
         }
 
         return $config;

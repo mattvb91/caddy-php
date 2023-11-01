@@ -8,24 +8,24 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Automation implements Arrayable
 {
-    private ?OnDemand $_onDemand;
+    private ?OnDemand $onDemand;
 
     /** @var array<Policies>|null  */
-    private ?array $_policies;
+    private ?array $policies;
 
     public function setOnDemand(OnDemand $onDemand): static
     {
-        $this->_onDemand = $onDemand;
+        $this->onDemand = $onDemand;
 
         return $this;
     }
 
     public function addPolicies(Policies $policies): static
     {
-        if (!isset($this->_policies)) {
-            $this->_policies = [$policies];
+        if (!isset($this->policies)) {
+            $this->policies = [$policies];
         } else {
-            $this->_policies[] = $policies;
+            $this->policies[] = $policies;
         }
 
         return $this;
@@ -35,18 +35,16 @@ class Automation implements Arrayable
     {
         $config = [];
 
-        if (isset($this->_onDemand)) {
-            $config['on_demand'] = $this->_onDemand->toArray();
+        if (isset($this->onDemand)) {
+            $config['on_demand'] = $this->onDemand->toArray();
         }
 
-        if (isset($this->_policies)) {
+        if (isset($this->policies)) {
             $config['policies'] = array_map(function (Policies $policies) {
                 return $policies->toArray();
-            }, $this->_policies);
+            }, $this->policies);
         }
 
         return $config;
     }
-
-
 }

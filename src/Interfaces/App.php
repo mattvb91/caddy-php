@@ -7,5 +7,4 @@ namespace mattvb91\CaddyPhp\Interfaces;
  */
 interface App extends Arrayable
 {
-
 }

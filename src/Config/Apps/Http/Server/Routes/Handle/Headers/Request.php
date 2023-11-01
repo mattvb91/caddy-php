@@ -13,11 +13,11 @@ class Request implements Arrayable
      * Names of HTTP header fields to delete.
      * @var string[]
      */
-    private array $_delete = [];
+    private array $delete = [];
 
     public function addDeleteHeader(string $header): static
     {
-        $this->_delete[] = $header;
+        $this->delete[] = $header;
 
         return $this;
     }
@@ -26,8 +26,8 @@ class Request implements Arrayable
     {
         $array = [];
 
-        if (count($this->_delete)) {
-            $array['delete'] = $this->_delete;
+        if (count($this->delete)) {
+            $array['delete'] = $this->delete;
         }
 
         return $array;

@@ -6,29 +6,28 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Account implements Arrayable
 {
+    private string $username;
 
-    private string $_username;
+    private string $password;
 
-    private string $_password;
-
-    private ?string $_salt;
+    private ?string $salt;
 
     public function __construct(string $username, string $password, ?string $salt = null)
     {
-        $this->_username = $username;
-        $this->_password = $password;
-        $this->_salt = $salt;
+        $this->username = $username;
+        $this->password = $password;
+        $this->salt = $salt;
     }
 
     public function toArray(): array
     {
         $config = [
-            'username' => $this->_username,
-            'password' => base64_encode(password_hash($this->_password, PASSWORD_BCRYPT)),
+            'username' => $this->username,
+            'password' => base64_encode(password_hash($this->password, PASSWORD_BCRYPT)),
         ];
 
-        if ($this->_salt) {
-            $config['salt'] = $this->_salt;
+        if ($this->salt) {
+            $config['salt'] = $this->salt;
         }
 
         return $config;

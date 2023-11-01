@@ -7,18 +7,18 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
 
 class Cache implements HandlerInterface
 {
-    private ?LogLevel $_logLevel;
+    private ?LogLevel $logLevel;
 
     /**
      * @var string[]|null
      */
-    private ?array $_allowedHttpVerbs;
+    private ?array $allowedHttpVerbs;
 
-    private ?string $_defaultCacheControl;
+    private ?string $defaultCacheControl;
 
     public function setLogLevel(?LogLevel $logLevel): static
     {
-        $this->_logLevel = $logLevel;
+        $this->logLevel = $logLevel;
 
         return $this;
     }
@@ -29,14 +29,14 @@ class Cache implements HandlerInterface
      */
     public function setAllowedHttpVerbs(array $allowedHttpVerbs): static
     {
-        $this->_allowedHttpVerbs = $allowedHttpVerbs;
+        $this->allowedHttpVerbs = $allowedHttpVerbs;
 
         return $this;
     }
 
     public function setDefaultCacheControl(string $defaultCacheControl): static
     {
-        $this->_defaultCacheControl = $defaultCacheControl;
+        $this->defaultCacheControl = $defaultCacheControl;
 
         return $this;
     }
@@ -47,16 +47,16 @@ class Cache implements HandlerInterface
             'handler' => $this->getHandler(),
         ];
 
-        if (isset($this->_logLevel)) {
-            $array['log_level'] = $this->_logLevel->value;
+        if (isset($this->logLevel)) {
+            $array['log_level'] = $this->logLevel->value;
         }
 
-        if (isset($this->_allowedHttpVerbs)) {
-            $array['allowed_http_verbs'] = $this->_allowedHttpVerbs;
+        if (isset($this->allowedHttpVerbs)) {
+            $array['allowed_http_verbs'] = $this->allowedHttpVerbs;
         }
 
-        if (isset($this->_defaultCacheControl)) {
-            $array['default_cache_control'] = $this->_defaultCacheControl;
+        if (isset($this->defaultCacheControl)) {
+            $array['default_cache_control'] = $this->defaultCacheControl;
         }
 
         return $array;
@@ -66,5 +66,4 @@ class Cache implements HandlerInterface
     {
         return 'cache';
     }
-
 }

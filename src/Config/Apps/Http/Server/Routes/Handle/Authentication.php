@@ -11,11 +11,11 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
 class Authentication implements HandlerInterface
 {
     /** @var ProviderInterface[]  */
-    private array $_providers;
+    private array $providers;
 
     public function addProvider(ProviderInterface $provider): static
     {
-        $this->_providers[] = $provider;
+        $this->providers[] = $provider;
 
         return $this;
     }
@@ -26,10 +26,10 @@ class Authentication implements HandlerInterface
             'handler' => $this->getHandler(),
         ];
 
-        if (count($this->_providers)) {
+        if (count($this->providers)) {
             $config['providers'] = array_map(static function (ProviderInterface $provider) {
                 return [$provider->getModuleName() => $provider->toArray()];
-            }, $this->_providers)[0];//TODO there has to be a better way than [0]
+            }, $this->providers)[0];//TODO there has to be a better way than [0]
         }
 
         return $config;

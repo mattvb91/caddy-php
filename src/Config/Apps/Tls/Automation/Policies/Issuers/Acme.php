@@ -7,20 +7,20 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Tls\Automation\Policies\IssuerInterface;
 
 class Acme implements IssuerInterface
 {
-    private ?string $_email;
+    private ?string $email;
 
-    private ?Challenges $_challenges;
+    private ?Challenges $challenges;
 
     public function setEmail(string $email): static
     {
-        $this->_email = $email;
+        $this->email = $email;
 
         return $this;
     }
 
     public function setChallenges(Challenges $challenges): static
     {
-        $this->_challenges = $challenges;
+        $this->challenges = $challenges;
 
         return $this;
     }
@@ -31,12 +31,12 @@ class Acme implements IssuerInterface
             'module' => $this->getModuleName(),
         ];
 
-        if (isset($this->_email)) {
-            $config['email'] = $this->_email;
+        if (isset($this->email)) {
+            $config['email'] = $this->email;
         }
 
-        if (isset($this->_challenges)) {
-            $config['challenges'] = $this->_challenges->toArray();
+        if (isset($this->challenges)) {
+            $config['challenges'] = $this->challenges->toArray();
         }
 
         return $config;

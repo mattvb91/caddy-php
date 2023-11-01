@@ -9,14 +9,14 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\ReverseProxy\Transpo
  */
 class FastCGI implements TransportInterface
 {
-    private ?string $_root;
+    private ?string $root;
 
     /** @var string[]|null  */
-    private ?array $_splitPath;
+    private ?array $splitPath;
 
     public function setRoot(string $root): static
     {
-        $this->_root = $root;
+        $this->root = $root;
 
         return $this;
     }
@@ -27,7 +27,7 @@ class FastCGI implements TransportInterface
      */
     public function setSplitPath(array $splitPath): static
     {
-        $this->_splitPath = $splitPath;
+        $this->splitPath = $splitPath;
 
         return $this;
     }
@@ -38,12 +38,12 @@ class FastCGI implements TransportInterface
             'protocol' => $this->getProtocol(),
         ];
 
-        if (isset($this->_splitPath)) {
-            $array['split_path'] = $this->_splitPath;
+        if (isset($this->splitPath)) {
+            $array['split_path'] = $this->splitPath;
         }
 
-        if (isset($this->_root)) {
-            $array['root'] = $this->_root;
+        if (isset($this->root)) {
+            $array['root'] = $this->root;
         }
 
         return $array;

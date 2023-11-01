@@ -7,12 +7,11 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Challenges implements Arrayable
 {
-
-    private ?Dns $_dns;
+    private ?Dns $dns;
 
     public function setDns(Dns $dns): static
     {
-        $this->_dns = $dns;
+        $this->dns = $dns;
 
         return $this;
     }
@@ -21,8 +20,8 @@ class Challenges implements Arrayable
     {
         $config = [];
 
-        if (isset($this->_dns)) {
-            $config['dns'] = $this->_dns->toArray();
+        if (isset($this->dns)) {
+            $config['dns'] = $this->dns->toArray();
         }
 
         return $config;

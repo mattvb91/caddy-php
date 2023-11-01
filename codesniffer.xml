@@ -3,6 +3,6 @@
     <description>PSR-12 with array indenting</description>
     <rule ref="PSR12"/>
     <rule ref="Generic.Arrays.ArrayIndent">
-        <exclude name="Generic.Arrays.ArrayIndent.CloseBRaceNotNewLine"/>
+        <exclude name="Generic.Arrays.ArrayIndent.CloseBraceNotNewLine"/>
     </rule>
 </ruleset>

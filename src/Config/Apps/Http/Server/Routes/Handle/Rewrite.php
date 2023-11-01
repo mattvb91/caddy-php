@@ -9,20 +9,20 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
  */
 class Rewrite implements HandlerInterface
 {
-    private ?string $_stripPathPrefix;
+    private ?string $stripPathPrefix;
 
-    private ?string $_uri;
+    private ?string $uri;
 
     public function setStripPathPrefix(?string $stripPathPrefix): static
     {
-        $this->_stripPathPrefix = $stripPathPrefix;
+        $this->stripPathPrefix = $stripPathPrefix;
 
         return $this;
     }
 
     public function setUri(string $uri): static
     {
-        $this->_uri = $uri;
+        $this->uri = $uri;
 
         return $this;
     }
@@ -33,12 +33,12 @@ class Rewrite implements HandlerInterface
             'handler' => $this->getHandler(),
         ];
 
-        if (isset($this->_stripPathPrefix)) {
-            $array['strip_path_prefix'] = $this->_stripPathPrefix;
+        if (isset($this->stripPathPrefix)) {
+            $array['strip_path_prefix'] = $this->stripPathPrefix;
         }
 
-        if (isset($this->_uri)) {
-            $array['uri'] = $this->_uri;
+        if (isset($this->uri)) {
+            $array['uri'] = $this->uri;
         }
 
         return $array;
@@ -48,5 +48,4 @@ class Rewrite implements HandlerInterface
     {
         return 'rewrite';
     }
-
 }

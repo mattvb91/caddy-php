@@ -11,20 +11,20 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
  */
 class Headers implements HandlerInterface
 {
-    private ?Request $_request;
+    private ?Request $request;
 
-    private ?Response $_response;
+    private ?Response $response;
 
     public function setRequest(?Request $request): static
     {
-        $this->_request = $request;
+        $this->request = $request;
 
         return $this;
     }
 
     public function setResponse(?Response $response): static
     {
-        $this->_response = $response;
+        $this->response = $response;
 
         return $this;
     }
@@ -35,12 +35,12 @@ class Headers implements HandlerInterface
             'handler' => $this->getHandler(),
         ];
 
-        if (isset($this->_response)) {
-            $array['response'] = $this->_response->toArray();
+        if (isset($this->response)) {
+            $array['response'] = $this->response->toArray();
         }
 
-        if (isset($this->_request)) {
-            $array['request'] = $this->_request->toArray();
+        if (isset($this->request)) {
+            $array['request'] = $this->request->toArray();
         }
 
         return $array;

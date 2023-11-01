@@ -15,7 +15,8 @@ class Admin implements Arrayable
 {
     /**
      * If true, the admin endpoint will be completely disabled.
-     * Note that this makes any runtime changes to the config impossible, since the interface to do so is through the admin endpoint.
+     * Note that this makes any runtime changes to the config impossible,
+     * since the interface to do so is through the admin endpoint.
      */
     private bool $disabled = false;
 

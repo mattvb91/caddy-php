@@ -10,21 +10,21 @@ class Response implements Arrayable
      * Names of HTTP header fields to delete.
      * @var string[]
      */
-    private array $_delete = [];
+    private array $delete = [];
 
     /**
      * @var array<string, string[]>
      */
-    private array $_add = [];
+    private array $add = [];
 
-    private bool $_deferred = false;
+    private bool $deferred = false;
 
     public function addDeleteHeader(string $header): static
     {
-        if (!isset($this->_delete)) {
-            $this->_delete = [$header];
+        if (!isset($this->delete)) {
+            $this->delete = [$header];
         } else {
-            $this->_delete[] = $header;
+            $this->delete[] = $header;
         }
 
         return $this;
@@ -32,14 +32,14 @@ class Response implements Arrayable
 
     public function addHeader(string $name, string $value): static
     {
-        $this->_add[$name] = [$value];
+        $this->add[$name] = [$value];
 
         return $this;
     }
 
     public function setDeferred(bool $deferred): static
     {
-        $this->_deferred = $deferred;
+        $this->deferred = $deferred;
 
         return $this;
     }
@@ -48,15 +48,15 @@ class Response implements Arrayable
     {
         $array = [];
 
-        if (count($this->_delete)) {
-            $array['delete'] = $this->_delete;
+        if (count($this->delete)) {
+            $array['delete'] = $this->delete;
         }
 
-        if (count($this->_add)) {
-            $array['add'] = $this->_add;
+        if (count($this->add)) {
+            $array['add'] = $this->add;
         }
 
-        $array['deferred'] = $this->_deferred;
+        $array['deferred'] = $this->deferred;
 
         return $array;
     }

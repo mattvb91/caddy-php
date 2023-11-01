@@ -7,7 +7,7 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Match\MatcherInterface;
 class File implements MatcherInterface
 {
     /** @var string[] */
-    private array $_tryFiles;
+    private array $tryFiles;
 
     /**
      * @param string[] $paths
@@ -15,7 +15,7 @@ class File implements MatcherInterface
      */
     public function setTryFiles(array $paths): static
     {
-        $this->_tryFiles = $paths;
+        $this->tryFiles = $paths;
 
         return $this;
     }
@@ -24,8 +24,8 @@ class File implements MatcherInterface
     {
         $config = [];
 
-        if (isset($this->_tryFiles)) {
-            $config['try_files'] = $this->_tryFiles;
+        if (isset($this->tryFiles)) {
+            $config['try_files'] = $this->tryFiles;
         }
 
         return [

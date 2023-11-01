@@ -8,17 +8,17 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 class Policies implements Arrayable
 {
     /** @var array<string>|null  */
-    private ?array $_subjects;
+    private ?array $subjects;
 
     /** @var array<IssuerInterface>|null  */
-    private ?array $_issuers;
+    private ?array $issuers;
 
     public function addSubjects(string $subject): static
     {
-        if (!isset($this->_subjects)) {
-            $this->_subjects = [$subject];
+        if (!isset($this->subjects)) {
+            $this->subjects = [$subject];
         } else {
-            $this->_subjects[] = $subject;
+            $this->subjects[] = $subject;
         }
 
         return $this;
@@ -26,10 +26,10 @@ class Policies implements Arrayable
 
     public function addIssuer(IssuerInterface $issuer): static
     {
-        if (!isset($this->_subjects)) {
-            $this->_issuers = [$issuer];
+        if (!isset($this->subjects)) {
+            $this->issuers = [$issuer];
         } else {
-            $this->_issuers[] = $issuer;
+            $this->issuers[] = $issuer;
         }
 
         return $this;
@@ -39,18 +39,16 @@ class Policies implements Arrayable
     {
         $config = [];
 
-        if (isset($this->_subjects)) {
-            $config['subjects'] = $this->_subjects;
+        if (isset($this->subjects)) {
+            $config['subjects'] = $this->subjects;
         }
 
-        if (isset($this->_issuers)) {
+        if (isset($this->issuers)) {
             $config['issuers'] = array_map(function (IssuerInterface $issuer) {
                 return $issuer->toArray();
-            }, $this->_issuers);
+            }, $this->issuers);
         }
 
         return $config;
     }
-
-
 }

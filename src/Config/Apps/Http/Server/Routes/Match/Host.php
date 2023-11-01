@@ -10,21 +10,21 @@ class Host implements MatcherInterface
      * We need unique identifiers for all our hosts
      * so we can later retrieve them to attach domains to the correct paths
      */
-    private string $_identifier;
+    private string $identifier;
 
     /**
      * @var array<string>
      */
-    private array $_hosts = [];
+    private array $hosts = [];
 
     public function __construct(string $identifier)
     {
-        $this->_identifier = $identifier;
+        $this->identifier = $identifier;
     }
 
     public function getIdentifier(): string
     {
-        return $this->_identifier;
+        return $this->identifier;
     }
 
     /**
@@ -33,14 +33,14 @@ class Host implements MatcherInterface
      */
     public function setHosts(array $hosts): static
     {
-        $this->_hosts = $hosts;
+        $this->hosts = $hosts;
 
         return $this;
     }
 
     public function addHost(string $host): void
     {
-        $this->_hosts = [$host, ...$this->_hosts];
+        $this->hosts = [$host, ...$this->hosts];
     }
 
     /**
@@ -49,7 +49,7 @@ class Host implements MatcherInterface
      */
     public function syncRemoveHost(string $hostname): void
     {
-        unset($this->_hosts[array_search($hostname, $this->_hosts)]);
+        unset($this->hosts[array_search($hostname, $this->hosts)]);
     }
 
     /**
@@ -57,13 +57,13 @@ class Host implements MatcherInterface
      */
     public function getHosts(): array
     {
-        return $this->_hosts;
+        return $this->hosts;
     }
 
     public function toArray(): array
     {
         return [
-            'host' => $this->_hosts,
+            'host' => $this->hosts,
         ];
     }
 }

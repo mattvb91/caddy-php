@@ -12,17 +12,17 @@ use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\ReverseProxy\Transpo
 class ReverseProxy implements HandlerInterface
 {
     /** @var Upstream[]|null  */
-    private ?array $_upstreams;
+    private ?array $upstreams;
 
     /** @var TransportInterface[]|null  */
-    private ?array $_transport;
+    private ?array $transport;
 
     public function addUpstream(Upstream $upstream): static
     {
-        if (!isset($this->_upstreams)) {
-            $this->_upstreams = [$upstream];
+        if (!isset($this->upstreams)) {
+            $this->upstreams = [$upstream];
         } else {
-            $this->_upstreams[] = $upstream;
+            $this->upstreams[] = $upstream;
         }
 
         return $this;
@@ -30,10 +30,10 @@ class ReverseProxy implements HandlerInterface
 
     public function addTransport(TransportInterface $transport): static
     {
-        if (!isset($this->_transport)) {
-            $this->_transport = [$transport];
+        if (!isset($this->transport)) {
+            $this->transport = [$transport];
         } else {
-            $this->_transport[] = $transport;
+            $this->transport[] = $transport;
         }
 
         return $this;
@@ -45,16 +45,17 @@ class ReverseProxy implements HandlerInterface
             'handler' => $this->getHandler(),
         ];
 
-        if (isset($this->_transport)) {
+        if (isset($this->transport)) {
             $array['transport'] = array_map(static function (TransportInterface $transport) {
                 return $transport->toArray();
-            }, $this->_transport)[0]; //TODO there has to be a better way than [0] access to get this level
+            }, $this->transport)[0]; //TODO there has to be a better way than [0] access to get this level
         }
 
-        if (isset($this->_upstreams)) {
+        if (isset($this->upstreams)) {
             $array['upstreams'] = [...array_map(static function (Upstream $upstream) {
                 return $upstream->toArray();
-            }, $this->_upstreams)];
+            }, $this->upstreams)
+            ];
         }
 
         return $array;

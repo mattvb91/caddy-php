@@ -6,48 +6,48 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 
 class Key implements Arrayable
 {
-    private string $_pattern;
+    private string $pattern;
 
-    private bool $_disable_host;
+    private bool $disable_host;
 
-    private bool $_disable_body;
+    private bool $disable_body;
 
-    private bool $_disable_method;
+    private bool $disable_method;
 
     public function __construct(
         string $pattern,
-        bool   $disable_host = false,
-        bool   $disable_body = false,
-        bool   $disable_method = false)
-    {
-        $this->_pattern = $pattern;
-        $this->_disable_host = $disable_host;
-        $this->_disable_body = $disable_body;
-        $this->_disable_method = $disable_method;
+        bool $disable_host = false,
+        bool $disable_body = false,
+        bool $disable_method = false
+    ) {
+        $this->pattern = $pattern;
+        $this->disable_host = $disable_host;
+        $this->disable_body = $disable_body;
+        $this->disable_method = $disable_method;
     }
 
     public function getPattern(): string
     {
-        return $this->_pattern;
+        return $this->pattern;
     }
 
     public function setDisableHost(bool $disable_host): static
     {
-        $this->_disable_host = $disable_host;
+        $this->disable_host = $disable_host;
 
         return $this;
     }
 
     public function setDisableBody(bool $disable_body): static
     {
-        $this->_disable_body = $disable_body;
+        $this->disable_body = $disable_body;
 
         return $this;
     }
 
     public function setDisableMethod(bool $disable_domain): static
     {
-        $this->_disable_method = $disable_domain;
+        $this->disable_method = $disable_domain;
 
         return $this;
     }
@@ -55,9 +55,9 @@ class Key implements Arrayable
     public function toArray(): array
     {
         return [
-            'disable_host'   => $this->_disable_host,
-            'disable_body'   => $this->_disable_body,
-            'disable_method' => $this->_disable_method,
+            'disable_host'   => $this->disable_host,
+            'disable_body'   => $this->disable_body,
+            'disable_method' => $this->disable_method,
         ];
     }
 }

@@ -4,9 +4,10 @@
   "type": "package",
   "license": "MIT",
   "scripts": {
+    "phpunit": "phpunit --testdox --coverage-clover=coverage.xml",
     "phpstan": "phpstan analyse",
     "codesniffer": "phpcs ./src ./tests/**/*.php --standard=./codesniffer.xml -p",
-    "codefixer": "phpcf ./src ./tests/**/*.php --standard=./codesniffer.xml"
+    "codefixer": "phpcbf ./src ./tests/**/*.php --standard=./codesniffer.xml"
   },
   "autoload": {
     "psr-4": {

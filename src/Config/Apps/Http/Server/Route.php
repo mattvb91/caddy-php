@@ -70,13 +70,13 @@ class Route implements Arrayable
             $config['group'] = $this->group;
         }
 
-        $config['handle'] = [...array_map(static function (HandlerInterface $handler) {
+        $config['handle'] = [...array_map(static function (HandlerInterface $handler): array {
             return $handler->toArray();
         }, $this->handle)
         ];
 
         if (isset($this->match)) {
-            $config['match'] = array_map(static function (MatcherInterface $matcher) {
+            $config['match'] = array_map(static function (MatcherInterface $matcher): array {
                 return $matcher->toArray();
             }, $this->match);
 

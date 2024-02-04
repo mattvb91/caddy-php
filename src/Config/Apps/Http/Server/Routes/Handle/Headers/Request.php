@@ -22,7 +22,6 @@ class Request implements Arrayable
 
 
     /**
-     * @param string $name
      * @param string[] $values
      * @return $this
      */
@@ -44,11 +43,11 @@ class Request implements Arrayable
     {
         $array = [];
 
-        if (count($this->delete)) {
+        if ($this->delete !== []) {
             $array['delete'] = $this->delete;
         }
 
-        if (count($this->add)) {
+        if ($this->add !== []) {
             $array['add'] = $this->add;
         }
 

@@ -93,6 +93,7 @@ jobs:
           docker run -v $(pwd):/app docker.pkg.github.com/mattvb91/${{ env.REPO_NAME }}/composer:head composer install
           docker run -v $(pwd):/app docker.pkg.github.com/mattvb91/${{ env.REPO_NAME }}/composer:head composer phpstan
           docker run -v $(pwd):/app docker.pkg.github.com/mattvb91/${{ env.REPO_NAME }}/composer:head composer codesniffer
+          docker run -v $(pwd):/app docker.pkg.github.com/mattvb91/${{ env.REPO_NAME }}/composer:head composer rector
           docker run --network="caddy-network" -e XDEBUG_MODE=coverage -v $(pwd):/app docker.pkg.github.com/mattvb91/${{ env.REPO_NAME }}/composer:head composer phpunit
         env:
           REPO_NAME: ${{ github.event.repository.name }}

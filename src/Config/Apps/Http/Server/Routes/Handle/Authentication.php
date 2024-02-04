@@ -26,8 +26,8 @@ class Authentication implements HandlerInterface
             'handler' => $this->getHandler(),
         ];
 
-        if (count($this->providers)) {
-            $config['providers'] = array_map(static function (ProviderInterface $provider) {
+        if ($this->providers !== []) {
+            $config['providers'] = array_map(static function (ProviderInterface $provider): array {
                 return [$provider->getModuleName() => $provider->toArray()];
             }, $this->providers)[0];//TODO there has to be a better way than [0]
         }

@@ -46,13 +46,13 @@ class ReverseProxy implements HandlerInterface
         ];
 
         if (isset($this->transport)) {
-            $array['transport'] = array_map(static function (TransportInterface $transport) {
+            $array['transport'] = array_map(static function (TransportInterface $transport): array {
                 return $transport->toArray();
             }, $this->transport)[0]; //TODO there has to be a better way than [0] access to get this level
         }
 
         if (isset($this->upstreams)) {
-            $array['upstreams'] = [...array_map(static function (Upstream $upstream) {
+            $array['upstreams'] = [...array_map(static function (Upstream $upstream): array {
                 return $upstream->toArray();
             }, $this->upstreams)
             ];

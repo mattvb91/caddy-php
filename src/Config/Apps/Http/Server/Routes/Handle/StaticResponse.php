@@ -20,7 +20,9 @@ class StaticResponse implements HandlerInterface
 
     public function __construct(?string $body = null, int $statusCode = 200)
     {
-        $body ? $this->body = $body : null;
+        if ($body) {
+            $this->body = $body;
+        }
         $this->statusCode = $statusCode;
     }
 

@@ -40,7 +40,7 @@ class Automation implements Arrayable
         }
 
         if (isset($this->policies)) {
-            $config['policies'] = array_map(function (Policies $policies) {
+            $config['policies'] = array_map(function (Policies $policies): array {
                 return $policies->toArray();
             }, $this->policies);
         }

@@ -19,7 +19,7 @@ class Not implements MatcherInterface
     public function toArray(): array
     {
         return [
-            'not' => array_map(static function (MatcherInterface $matcher) {
+            'not' => array_map(static function (MatcherInterface $matcher): array {
                 return $matcher->toArray();
             }, $this->not),
         ];

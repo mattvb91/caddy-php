@@ -107,7 +107,7 @@ class Server implements Arrayable
     {
         $config = [
             'listen' => $this->listen,
-            'routes' => [...array_map(static function (Route $route) {
+            'routes' => [...array_map(static function (Route $route): array {
                 return $route->toArray();
             }, $this->routes)
             ],

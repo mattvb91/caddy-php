@@ -217,10 +217,10 @@ class Caddy implements Arrayable
             $config['logging'] = $this->logging->toArray();
         }
 
-        if (count($this->apps)) {
+        if ($this->apps !== []) {
             $apps = [];
 
-            array_map(static function (App $app, string $appNamespace) use (&$apps) {
+            array_map(static function (App $app, string $appNamespace) use (&$apps): void {
                 $apps[$appNamespace] = $app->toArray();
             }, $this->apps, array_keys($this->apps));
 
@@ -231,13 +231,11 @@ class Caddy implements Arrayable
     }
 
     /**
-     * @param string $hostIdentifier
-     * @return void
      * @throws \Exception
      */
     protected function buildHostsCache(string $hostIdentifier): void
     {
-        if (!key_exists($hostIdentifier, $this->hostsCache)) {
+        if (!array_key_exists($hostIdentifier, $this->hostsCache)) {
             //Find the host so we can get its path
 
             $hostPath = null;

@@ -15,7 +15,7 @@ use mattvb91\CaddyPhp\Interfaces\Arrayable;
 class Logging implements Arrayable
 {
     /** @var Log[] $logs */
-    private $logs = [];
+    private array $logs = [];
 
     public function addLog(Log $log, ?string $name = 'default'): static
     {
@@ -31,7 +31,7 @@ class Logging implements Arrayable
     {
         $logs = [];
 
-        array_map(function (string $key, Log $log) use (&$logs) {
+        array_map(function (string $key, Log $log) use (&$logs): void {
             $logs[$key] = $log->toArray();
         }, array_keys($this->logs), $this->logs);
 

@@ -48,11 +48,11 @@ class Response implements Arrayable
     {
         $array = [];
 
-        if (count($this->delete)) {
+        if ($this->delete !== []) {
             $array['delete'] = $this->delete;
         }
 
-        if (count($this->add)) {
+        if ($this->add !== []) {
             $array['add'] = $this->add;
         }
 

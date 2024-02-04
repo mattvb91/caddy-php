@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Tls;
 
 use mattvb91\CaddyPhp\Config\Apps\Tls\Automation\OnDemand;
@@ -40,7 +42,7 @@ class Automation implements Arrayable
         }
 
         if (isset($this->policies)) {
-            $config['policies'] = array_map(function (Policies $policies) {
+            $config['policies'] = array_map(function (Policies $policies): array {
                 return $policies->toArray();
             }, $this->policies);
         }

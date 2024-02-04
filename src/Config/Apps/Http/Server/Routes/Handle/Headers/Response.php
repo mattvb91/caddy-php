@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Headers;
 
 use mattvb91\CaddyPhp\Interfaces\Arrayable;
@@ -48,11 +50,11 @@ class Response implements Arrayable
     {
         $array = [];
 
-        if (count($this->delete)) {
+        if ($this->delete !== []) {
             $array['delete'] = $this->delete;
         }
 
-        if (count($this->add)) {
+        if ($this->add !== []) {
             $array['add'] = $this->add;
         }
 

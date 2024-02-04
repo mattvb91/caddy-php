@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Tls\Automation;
 
 use mattvb91\CaddyPhp\Interfaces\Apps\Tls\Automation\Policies\IssuerInterface;
@@ -44,7 +46,7 @@ class Policies implements Arrayable
         }
 
         if (isset($this->issuers)) {
-            $config['issuers'] = array_map(function (IssuerInterface $issuer) {
+            $config['issuers'] = array_map(function (IssuerInterface $issuer): array {
                 return $issuer->toArray();
             }, $this->issuers);
         }

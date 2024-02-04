@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication\Providers;
 
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication\Providers\HttpBasic\Account;
@@ -31,8 +33,8 @@ class HttpBasic implements ProviderInterface
     {
         $config = [];
 
-        if (count($this->accounts)) {
-            $config['accounts'] = [...array_map(function (Account $account) {
+        if ($this->accounts !== []) {
+            $config['accounts'] = [...array_map(function (Account $account): array {
                 return $account->toArray();
             }, $this->accounts)
             ];

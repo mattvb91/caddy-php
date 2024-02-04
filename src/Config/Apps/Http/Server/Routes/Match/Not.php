@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Match;
 
 use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Match\MatcherInterface;
@@ -19,7 +21,7 @@ class Not implements MatcherInterface
     public function toArray(): array
     {
         return [
-            'not' => array_map(static function (MatcherInterface $matcher) {
+            'not' => array_map(static function (MatcherInterface $matcher): array {
                 return $matcher->toArray();
             }, $this->not),
         ];

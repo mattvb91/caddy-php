@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Interfaces\Apps\Tls\Automation\Policies;
 
 use mattvb91\CaddyPhp\Interfaces\Arrayable;

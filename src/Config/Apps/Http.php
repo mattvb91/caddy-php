@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps;
 
 use mattvb91\CaddyPhp\Config\Apps\Http\Server;
@@ -63,7 +65,7 @@ class Http implements App
         }
 
         $servers = [];
-        array_map(static function (Server $server, string $key) use (&$servers) {
+        array_map(static function (Server $server, string $key) use (&$servers): void {
             $servers[$key] = $server->toArray();
         }, $this->servers, array_keys($this->servers));
 

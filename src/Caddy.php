@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp;
 
 use GuzzleHttp\Client;
@@ -72,7 +74,12 @@ class Caddy implements Arrayable
         $this->buildHostsCache($hostIdentifier);
 
         /** @var string[] $hosts */
-        $hosts = json_decode($this->client->get($this->hostsCache[$hostIdentifier]['path'])->getBody(), true);
+        $hosts = json_decode(
+            $this->client->get($this->hostsCache[$hostIdentifier]['path'])
+                ->getBody()
+                ->getContents(),
+            true
+        );
 
         $this->hostsCache[$hostIdentifier]['host']->setHosts($hosts);
     }
@@ -129,7 +136,12 @@ class Caddy implements Arrayable
     public function getRemoteConfig(): object
     {
         /** @var object */
-        return json_decode($this->client->get('/config')->getBody(), false, 512, JSON_THROW_ON_ERROR);
+        return json_decode(
+            $this->client->get('/config')->getBody()->getContents(),
+            false,
+            512,
+            JSON_THROW_ON_ERROR
+        );
     }
 
     /**
@@ -217,10 +229,10 @@ class Caddy implements Arrayable
             $config['logging'] = $this->logging->toArray();
         }
 
-        if (count($this->apps)) {
+        if ($this->apps !== []) {
             $apps = [];
 
-            array_map(static function (App $app, string $appNamespace) use (&$apps) {
+            array_map(static function (App $app, string $appNamespace) use (&$apps): void {
                 $apps[$appNamespace] = $app->toArray();
             }, $this->apps, array_keys($this->apps));
 
@@ -231,13 +243,11 @@ class Caddy implements Arrayable
     }
 
     /**
-     * @param string $hostIdentifier
-     * @return void
      * @throws \Exception
      */
     protected function buildHostsCache(string $hostIdentifier): void
     {
-        if (!key_exists($hostIdentifier, $this->hostsCache)) {
+        if (!array_key_exists($hostIdentifier, $this->hostsCache)) {
             //Find the host so we can get its path
 
             $hostPath = null;

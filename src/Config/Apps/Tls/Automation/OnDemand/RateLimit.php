@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Tls\Automation\OnDemand;
 
 use mattvb91\CaddyPhp\Interfaces\Arrayable;

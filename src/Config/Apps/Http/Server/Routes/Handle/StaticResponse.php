@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle;
 
 use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\HandlerInterface;
@@ -20,7 +22,9 @@ class StaticResponse implements HandlerInterface
 
     public function __construct(?string $body = null, int $statusCode = 200)
     {
-        $body ? $this->body = $body : null;
+        if ($body) {
+            $this->body = $body;
+        }
         $this->statusCode = $statusCode;
     }
 

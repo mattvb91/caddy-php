@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Http;
 
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Route;
@@ -107,7 +109,7 @@ class Server implements Arrayable
     {
         $config = [
             'listen' => $this->listen,
-            'routes' => [...array_map(static function (Route $route) {
+            'routes' => [...array_map(static function (Route $route): array {
                 return $route->toArray();
             }, $this->routes)
             ],

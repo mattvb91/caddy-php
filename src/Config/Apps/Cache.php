@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps;
 
 use mattvb91\CaddyPhp\Config\Apps\Cache\Api;
@@ -116,7 +118,7 @@ class Cache implements App
         }
 
         if (isset($this->cacheKeys)) {
-            $array['cache_keys'] = array_map(static function (Key $key) {
+            $array['cache_keys'] = array_map(static function (Key $key): array {
                 return [$key->getPattern() => $key->toArray()];
             }, $this->cacheKeys)[0]; //TODO there has to be a better way than [0] access to get this level
         }

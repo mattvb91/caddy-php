@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle;
 
 use mattvb91\CaddyPhp\Interfaces\Apps\Servers\Routes\Handle\Authentication\ProviderInterface;
@@ -26,8 +28,8 @@ class Authentication implements HandlerInterface
             'handler' => $this->getHandler(),
         ];
 
-        if (count($this->providers)) {
-            $config['providers'] = array_map(static function (ProviderInterface $provider) {
+        if ($this->providers !== []) {
+            $config['providers'] = array_map(static function (ProviderInterface $provider): array {
                 return [$provider->getModuleName() => $provider->toArray()];
             }, $this->providers)[0];//TODO there has to be a better way than [0]
         }

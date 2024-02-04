@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle;
 
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Route;
@@ -24,7 +26,7 @@ class Subroute implements HandlerInterface
     {
         return [
             'handler' => $this->getHandler(),
-            'routes'  => [...array_map(static function (Route $route) {
+            'routes'  => [...array_map(static function (Route $route): array {
                 return $route->toArray();
             }, $this->routes)
             ],

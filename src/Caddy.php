@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp;
 
 use GuzzleHttp\Client;
@@ -72,7 +74,12 @@ class Caddy implements Arrayable
         $this->buildHostsCache($hostIdentifier);
 
         /** @var string[] $hosts */
-        $hosts = json_decode($this->client->get($this->hostsCache[$hostIdentifier]['path'])->getBody(), true);
+        $hosts = json_decode(
+            $this->client->get($this->hostsCache[$hostIdentifier]['path'])
+                ->getBody()
+                ->getContents(),
+            true
+        );
 
         $this->hostsCache[$hostIdentifier]['host']->setHosts($hosts);
     }
@@ -129,7 +136,12 @@ class Caddy implements Arrayable
     public function getRemoteConfig(): object
     {
         /** @var object */
-        return json_decode($this->client->get('/config')->getBody(), false, 512, JSON_THROW_ON_ERROR);
+        return json_decode(
+            $this->client->get('/config')->getBody()->getContents(),
+            false,
+            512,
+            JSON_THROW_ON_ERROR
+        );
     }
 
     /**

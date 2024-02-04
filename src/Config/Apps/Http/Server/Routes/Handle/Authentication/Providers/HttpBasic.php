@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication\Providers;
 
 use mattvb91\CaddyPhp\Config\Apps\Http\Server\Routes\Handle\Authentication\Providers\HttpBasic\Account;
